@@ -133,12 +133,11 @@ final class MainViewController: UIViewController {
     func loadStar() {
         myStar.node = SCNNode(geometry: SCNSphere(radius: 0.3))
         myStar.node.scale = SCNVector3(getStarData("scalex") as! Float, getStarData("scaley") as! Float, getStarData("scalez") as! Float)
-        myStar.node.light?.intensity = 2_700
+        myStar.node.light?.intensity = 2_300
         myStar.node.light?.type = .ambient
         let surface = SCNMaterial()
-        let surfaceImage = UIImage(named: "gray1")!
+        let surfaceImage = UIImage(named: "gray1")?.withTintColor(myStar.color)
         surface.diffuse.contents = surfaceImage
-        surface.emission.contents = myStar.color
         myStar.node.geometry?.insertMaterial(surface, at: 0)
         
         let corona = SCNParticleSystem()
@@ -178,9 +177,9 @@ final class MainViewController: UIViewController {
     func newText(_ text: String) {
         let width = UIScreen.main.bounds.width
         let height = UIScreen.main.bounds.height
-        let x = Int.random(in: 40..<Int(width) - 80)
+        let x = Int.random(in: 20..<Int(width) - 120)
         let y = Int.random(in: 240..<Int(height) - 240)
-        let label = UILabel(frame: CGRect(x: x, y: y, width: 80, height: 30))
+        let label = UILabel(frame: CGRect(x: x, y: y, width: 100, height: 30))
         label.textColor = .white
         label.font = .roundedFont(ofSize: 18, weight: .black)
         label.text = "+\(text)"

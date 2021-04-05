@@ -27,9 +27,24 @@ struct Star {
         node.light?.intensity = 2_700
         node.light?.type = .ambient
         let surface = SCNMaterial()
-        let surfaceImage = UIImage(named: surfaceImageString)!
+        var surfaceImage: UIImage!
+        switch color {
+            case .red:
+                surfaceImage = UIImage(named: surfaceImageString)!
+            case .orange:
+                surfaceImage = UIImage(named: surfaceImageString)!
+            case .yellow:
+                surfaceImage = UIImage(named: surfaceImageString)!
+            case .white:
+                surfaceImage = UIImage(named: surfaceImageString)!
+            case .cyan:
+                surfaceImage = UIImage(named: surfaceImageString)!
+            case .blue:
+                surfaceImage = UIImage(named: surfaceImageString)!
+            default:
+                surfaceImage = UIImage(named: surfaceImageString)!
+        }
         surface.diffuse.contents = surfaceImage
-        surface.emission.contents = color
         node.geometry?.insertMaterial(surface, at: 0)
         
         let corona = SCNParticleSystem()
