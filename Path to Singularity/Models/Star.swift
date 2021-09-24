@@ -113,7 +113,7 @@ struct Star {
         starParticle2.blendMode = .additive
         DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
             self.node.removeAllParticleSystems()
-            if self.zams > 25 {
+            if self.zams > 20 {
                 self.createBlackHole()
             } else {
                 self.becomeNeutron()

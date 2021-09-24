@@ -26,48 +26,48 @@ final class ShopViewController: UIViewController, Draggable {
     let shopTypesList: [ItemType] = [.boostItem, .star]
     var starShopItems: [ShopItem] = [
         
-        ShopItem(name: "Ran (Epsilon Eridani)", itemType: .star, price: 30_000, image: UIImage(),
+        ShopItem(name: "Ran (Epsilon Eridani)", itemType: .star, price: 30_000, image: UIImage(named: "blue_star")!,
                  item: Star(name: "Alpha Centauri A", zams: 1.2, energy: 500_000,
                             maxEnergy: 500_000, rotationSpeed: 1, fuseRate: 10, isAlive: true,
                             color: .red, node: SCNNode())),
         
-        ShopItem(name: "Aldebaran (Alpha Tauri)", itemType: .star, price: 100_000, image: UIImage(),
+        ShopItem(name: "Aldebaran (Alpha Tauri)", itemType: .star, price: 100_000, image: UIImage(named: "blue_star")!,
                  item: Star(name: "Aldebaran", zams: 1.2, energy: 500_000,
                             maxEnergy: 500_000, rotationSpeed: 1, fuseRate: 300, isAlive: true,
                             color: .orange, node: SCNNode())),
         
-        ShopItem(name: "Altair", itemType: .star, price: 1_000_000, image: UIImage(),
+        ShopItem(name: "Altair", itemType: .star, price: 1_000_000, image: UIImage(named: "blue_star")!,
                  item: Star(name: "Altair", zams: 1.79, energy: 10_000_000,
                             maxEnergy: 10_000_000, rotationSpeed: 1, fuseRate: 1000, isAlive: true,
                             color: .white, node: SCNNode())),
         
-        ShopItem(name: "T Tauri", itemType: .star, price: 6_000_000, image: UIImage(),
+        ShopItem(name: "T Tauri", itemType: .star, price: 6_000_000, image: UIImage(named: "blue_star")!,
                  item: Star(name: "T Tauri", zams: 2.12, energy: 100_000_000,
                             maxEnergy: 100_000_000, rotationSpeed: 1, fuseRate: 10000, isAlive: true,
                             color: .yellow, node: SCNNode())),
         
-        ShopItem(name: "Sagittarius A*", itemType: .star, price: 20_000_000, image: UIImage(),
+        ShopItem(name: "Sagittarius A*", itemType: .star, price: 20_000_000, image: UIImage(named: "blue_star")!,
                  item: Star(name: "Sagittarius A*", zams: 4.154, energy: 100_000_000_000,
                             maxEnergy: 100_000_000_000, rotationSpeed: 1, fuseRate: 100_000, isAlive: true,
                             color: .yellow, node: SCNNode())),
         
-        ShopItem(name: "Bellatrix (Gamma Orionis)", itemType: .star, price: 100_000_000, image: UIImage(),
+        ShopItem(name: "Bellatrix (Gamma Orionis)", itemType: .star, price: 100_000_000, image: UIImage(named: "blue_star")!,
                  item: Star(name: "Bellatrix", zams: 8.6, energy: 100_000_000_000,
                             maxEnergy: 100_000_000_000, rotationSpeed: 1, fuseRate: 1_000_000, isAlive: true,
                             color: .cyan, node: SCNNode())),
         
         
-        ShopItem(name: "Antares (Alpha Scorpii)", itemType: .star, price: 800_000_000, image: UIImage(),
+        ShopItem(name: "Antares (Alpha Scorpii)", itemType: .star, price: 800_000_000, image: UIImage(named: "blue_star")!,
                  item: Star(name: "Antares", zams: 13, energy: 100_000_000_000,
                             maxEnergy: 100_000_000_000, rotationSpeed: 1, fuseRate: 10_000_000, isAlive: true,
                             color: .blue, node: SCNNode())),
         
-        ShopItem(name: "Betelgeuse", itemType: .star, price: 100_000_000, image: UIImage(),
+        ShopItem(name: "Betelgeuse", itemType: .star, price: 100_000_000, image: UIImage(named: "blue_star")!,
                  item: Star(name: "Betelgeuse", zams: 17, energy: 100_000_000_000,
                             maxEnergy: 100_000_000_000, rotationSpeed: 1, fuseRate: 100_000_000, isAlive: true,
                             color: .red, node: SCNNode())),
         
-        ShopItem(name: "Rigel (Beta Orionis)", itemType: .star, price: 100_000_000, image: UIImage(),
+        ShopItem(name: "Rigel (Beta Orionis)", itemType: .star, price: 100_000_000, image: UIImage(named: "blue_star")!,
                  item: Star(name: "Rigel", zams: 21, energy: 100_000_000_000,
                             maxEnergy: 100_000_000_000, rotationSpeed: 1, fuseRate: 1_000_000_000, isAlive: true,
                             color: .blue, node: SCNNode())),
@@ -85,13 +85,7 @@ final class ShopViewController: UIViewController, Draggable {
         ShopItem(name: "Field of Panels", itemType: .boostItem, price: 50_000, image: UIImage(named: "fieldofpanels")!,
                  item: BoostItem(name: "Field of Panels", value: 200)),
         ShopItem(name: "Forest", itemType: .boostItem, price: 250_000, image: UIImage(named: "forest")!,
-                 item: BoostItem(name: "Forest", value: 4_000)),
-        ShopItem(name: "?", itemType: .boostItem, price: 500_000, image: UIImage(),
-                 item: BoostItem(name: "???", value: 10_000)),
-        ShopItem(name: "??", itemType: .boostItem, price: 1_000_000, image: UIImage(),
-                 item: BoostItem(name: "???", value: 60_000)),
-        ShopItem(name: "???", itemType: .boostItem, price: 1_000_000, image: UIImage(),
-                 item: BoostItem(name: "???", value: 110_000))
+                 item: BoostItem(name: "Forest", value: 4_000))
     ]
     
     
