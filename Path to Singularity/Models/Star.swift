@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 import SceneKit
 
-struct Star {
+class Star {
     
     var name: String
     var zams: Double // zero age main sequence mass
@@ -21,8 +21,19 @@ struct Star {
     var color: UIColor
     var node: SCNNode // used to reference/modify the node
     
-    // used to create a new node
-    mutating func creatNode(radius: CGFloat = 0.3, surfaceImageString: String = "gray1") {
+    init(name: String, zams: Double, energy: Double, maxEnergy: Double, rotationSpeed: Double, fuseRate: Double, isAlive: Bool, color: UIColor, node: SCNNode) {
+        self.name = name
+        self.zams = zams
+        self.energy = energy
+        self.maxEnergy = maxEnergy
+        self.rotationSpeed = rotationSpeed
+        self.fuseRate = fuseRate
+        self.isAlive = isAlive
+        self.color = color
+        self.node = node
+    }
+    
+    func creatNode(radius: CGFloat = 0.3, surfaceImageString: String = "gray1") {
         node = SCNNode(geometry: SCNSphere(radius: radius))
         node.light?.intensity = 2_700
         node.light?.type = .ambient
@@ -46,7 +57,12 @@ struct Star {
         }
         surface.diffuse.contents = surfaceImage
         node.geometry?.insertMaterial(surface, at: 0)
-        
+        node.scale = SCNVector3(1, 1, 1)
+        node.addParticleSystem(createCorona())
+        node.addParticleSystem(createStarParticle())
+    }
+    
+    func createCorona() -> SCNParticleSystem {
         let corona = SCNParticleSystem()
         corona.birthRate = 10_000
         corona.birthDirection = .random
@@ -58,6 +74,10 @@ struct Star {
         corona.particleColor = color
         corona.particleSize = 0.001
         corona.blendMode = .additive
+        return corona
+    }
+    
+    func createStarParticle() -> SCNParticleSystem {
         let starParticle = SCNParticleSystem()
         starParticle.birthRate = 25
         starParticle.birthDirection = .random
@@ -68,10 +88,7 @@ struct Star {
         starParticle.particleColor = color
         starParticle.particleSize = 0.001
         starParticle.blendMode = .additive
-        
-        node.scale = SCNVector3(1, 1, 1)
-        node.addParticleSystem(corona)
-        node.addParticleSystem(starParticle)
+        return starParticle
     }
     
     func die() {
@@ -79,8 +96,8 @@ struct Star {
             case 0..<0.5:
                 becomeWhiteDwarf()
             case 0.5..<8:
-                becomeRedGiant {
-                    becomeWhiteDwarf()
+                becomeRedGiant { [unowned self] in
+                    self.becomeWhiteDwarf()
                 }
             case 8...100_000_000_000:
                 performSuperNova()
@@ -224,7 +241,6 @@ struct Star {
         node.addParticleSystem(jet)
         return node
     }
-    
     
     func neutronStarPhysicsField() -> SCNPhysicsField {
         let field = SCNPhysicsField.radialGravity()

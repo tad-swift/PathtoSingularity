@@ -8,16 +8,15 @@
 import UIKit
 import SceneKit
 
-final class ShopViewController: UIViewController, Draggable {
+final class ShopViewController: UIViewController {
     
     enum Section {
         case main
     }
     
-    @IBOutlet weak var shopTypeView: UIView!
-    @IBOutlet weak var shopItemsView: UIView!
+    var shopTypeView: UIView!
+    var shopItemsView: UIView!
     
-    var sheetCoordinator: UBottomSheetCoordinator?
     var shopTypesCollectionView: UICollectionView!
     var shopItemsCollectionView: UICollectionView!
     var shopTypeDataSource: UICollectionViewDiffableDataSource<Section, ItemType>!
@@ -98,11 +97,6 @@ final class ShopViewController: UIViewController, Draggable {
         configureShop()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        sheetCoordinator?.startTracking(item: self)
-    }
-    
     func configureShop() {
         var snapshot = NSDiffableDataSourceSnapshot<Section, ItemType>()
         snapshot.appendSections([.main])
@@ -129,10 +123,6 @@ final class ShopViewController: UIViewController, Draggable {
                 shopItemsDataSource.apply(snapshot, animatingDifferences: false)
         }
         
-    }
-    
-    func draggableView() -> UIView? {
-        return self.view
     }
     
 }

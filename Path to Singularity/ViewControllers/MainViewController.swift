@@ -11,9 +11,19 @@ import CoreData
 
 final class MainViewController: UIViewController {
     
-    @IBOutlet weak var sceneView: SCNView!
-    @IBOutlet weak var energyLabel: UILabel!
-    @IBOutlet weak var energyBar: UIProgressView!
+    let sceneView = SCNView()
+    
+    let energyLabel: UILabel = {
+        let v = UILabel()
+        v.translatesAutoresizingMaskIntoConstraints = false
+        return v
+    }()
+    
+    let energyBar: UIProgressView = {
+        let v = UIProgressView()
+        v.translatesAutoresizingMaskIntoConstraints = false
+        return v
+    }()
     
     var lifeTimer: Timer!
     var autoTimer: Timer!
@@ -30,21 +40,30 @@ final class MainViewController: UIViewController {
         if def.bool(forKey: "has_saved_data") == true {
             loadPlayerData()
             loadStar()
-            setScene()
             createViews()
+            setScene()
         } else {
             createNewData()
             myStar.creatNode()
-            setScene()
             createViews()
+            setScene()
         }
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
         createLifeTimer()
         createAutoTimer()
         createSaveTimer()
+    }
+    
+    func activateConstraints() {
+        sceneView.frame = view.bounds
+        view.addSubviews(sceneView, energyBar, energyLabel)
+        NSLayoutConstraint.activate([
+            energyBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            energyBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            energyBar.widthAnchor.constraint(equalToConstant: 200),
+            
+            energyLabel.leadingAnchor.constraint(equalTo: energyBar.leadingAnchor),
+            energyLabel.topAnchor.constraint(equalTo: energyBar.bottomAnchor)
+        ])
     }
     
     func createNewData() {
@@ -68,12 +87,14 @@ final class MainViewController: UIViewController {
                                    getStarData("colorg") as! Float,
                                    getStarData("colorb") as! Float]
             
-            myStar = Star(name: getStarData("name") as! String, zams: getStarData("zams") as! Double,
+            myStar = Star(name: getStarData("name") as! String,
+                          zams: getStarData("zams") as! Double,
                           energy: getStarData("energy") as! Double,
                           maxEnergy: getStarData("maxEnergy") as! Double,
                           rotationSpeed: getStarData("rotationSpeed") as! Double,
-                          fuseRate: getStarData("fuseRate") as! Double, isAlive: getStarData("isAlive") as! Bool,
-                          color: UIColor.init(red: CGFloat(colors[0]), green: CGFloat(colors[1]), blue: CGFloat(colors[2]), alpha: 1),
+                          fuseRate: getStarData("fuseRate") as! Double,
+                          isAlive: getStarData("isAlive") as! Bool,
+                          color: UIColor(red: CGFloat(colors[0]), green: CGFloat(colors[1]), blue: CGFloat(colors[2]), alpha: 1),
                           node: SCNNode())
         } catch let error as NSError {
             print("Could not fetch. \(error), \(error.userInfo)")
@@ -99,20 +120,17 @@ final class MainViewController: UIViewController {
     }
     
     func createLifeTimer() {
-        let context = ["user": "@twostraws"]
-        lifeTimer = Timer(timeInterval: 0.1, target: self, selector: #selector(fireLifeTimer), userInfo: context, repeats: true)
+        lifeTimer = Timer(timeInterval: 0.1, target: self, selector: #selector(fireLifeTimer), userInfo: nil, repeats: true)
         RunLoop.current.add(lifeTimer, forMode: .common)
     }
     
     func createAutoTimer() {
-        let context = ["user": "@twostraws"]
-        autoTimer = Timer(timeInterval: 1, target: self, selector: #selector(fireAutoTimer), userInfo: context, repeats: true)
+        autoTimer = Timer(timeInterval: 1, target: self, selector: #selector(fireAutoTimer), userInfo: nil, repeats: true)
         RunLoop.current.add(autoTimer, forMode: .common)
     }
     
     func createSaveTimer() {
-        let context = ["user": "@twostraws"]
-        saveTimer = Timer(timeInterval: 5, target: self, selector: #selector(saveData), userInfo: context, repeats: true)
+        saveTimer = Timer(timeInterval: 5, target: self, selector: #selector(saveData), userInfo: nil, repeats: true)
         RunLoop.current.add(saveTimer, forMode: .common)
     }
     
@@ -120,10 +138,7 @@ final class MainViewController: UIViewController {
         energyLabel.font = .roundedFont(ofSize: 22, weight: .bold)
         energyBar.progress = Float(myStar.energy / myStar.maxEnergy)
         updateLabels()
-        let sheetCoordinator = UBottomSheetCoordinator(parent: self)
-        let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ShopViewController") as! ShopViewController
-        vc.sheetCoordinator = sheetCoordinator
-        sheetCoordinator.addSheet(vc, to: self)
+        
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
         sceneView.addGestureRecognizer(tapGesture)
         NotificationCenter.default.addObserver(self, selector: #selector(updateLabels), name: NSNotification.Name(rawValue: "updateLabels"), object: nil)
