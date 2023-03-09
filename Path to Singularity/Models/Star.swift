@@ -8,20 +8,36 @@
 import Foundation
 import UIKit
 import SceneKit
+import CoreData
 
-class Star {
+@objc(Star)
+public class Star: NSManagedObject, Identifiable {
     
-    var name: String
-    var zams: Double // zero age main sequence mass
-    var energy: Double
-    var maxEnergy: Double
-    var rotationSpeed: Double
-    var fuseRate: Double
-    var isAlive: Bool
-    var color: UIColor
-    var node: SCNNode // used to reference/modify the node
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<Star> {
+        return NSFetchRequest<Star>(entityName: "Star")
+    }
     
-    init(name: String, zams: Double, energy: Double, maxEnergy: Double, rotationSpeed: Double, fuseRate: Double, isAlive: Bool, color: UIColor, node: SCNNode) {
+    @NSManaged public var colorb: Float
+    @NSManaged public var colorg: Float
+    @NSManaged public var colorr: Float
+    @NSManaged public var energy: Double
+    @NSManaged public var fuseRate: Double
+    @NSManaged public var isAlive: Bool
+    @NSManaged public var maxEnergy: Double
+    @NSManaged public var name: String?
+    @NSManaged public var rotationSpeed: Double
+    @NSManaged public var scalex: Float
+    @NSManaged public var scaley: Float
+    @NSManaged public var scalez: Float
+    @NSManaged public var zams: Double
+    
+    var color: UIColor {
+        UIColor(red: CGFloat(colorr), green: CGFloat(colorg), blue: CGFloat(colorb), alpha: 1)
+    }
+    var node: SCNNode = SCNNode() // used to reference/modify the node
+    
+    public init(name: String, zams: Double, energy: Double, maxEnergy: Double, rotationSpeed: Double, fuseRate: Double, isAlive: Bool, color: [Float], node: SCNNode) {
+        super.init(entity: NSEntityDescription(), insertInto: CoreData.shared.managedContext)
         self.name = name
         self.zams = zams
         self.energy = energy
@@ -29,7 +45,9 @@ class Star {
         self.rotationSpeed = rotationSpeed
         self.fuseRate = fuseRate
         self.isAlive = isAlive
-        self.color = color
+        self.colorr = color[0]
+        self.colorg = color[1]
+        self.colorb = color[2]
         self.node = node
     }
     
@@ -62,6 +80,10 @@ class Star {
         node.addParticleSystem(createStarParticle())
     }
     
+}
+
+extension Star {
+    
     func createCorona() -> SCNParticleSystem {
         let corona = SCNParticleSystem()
         corona.birthRate = 10_000
@@ -93,17 +115,17 @@ class Star {
     
     func die() {
         switch zams {
-            case 0..<0.5:
-                becomeWhiteDwarf()
-            case 0.5..<8:
-                becomeRedGiant { [unowned self] in
-                    self.becomeWhiteDwarf()
-                }
-            case 8...100_000_000_000:
-                performSuperNova()
-            default:
-                becomeWhiteDwarf()
-                
+        case 0..<0.5:
+            becomeWhiteDwarf()
+        case 0.5..<8:
+            becomeRedGiant { [unowned self] in
+                self.becomeWhiteDwarf()
+            }
+        case 8...100_000_000_000:
+            performSuperNova()
+        default:
+            becomeWhiteDwarf()
+            
         }
     }
     
@@ -250,5 +272,4 @@ class Star {
         field.isExclusive = true
         return field
     }
-    
 }

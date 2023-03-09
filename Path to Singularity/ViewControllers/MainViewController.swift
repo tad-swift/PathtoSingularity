@@ -25,32 +25,36 @@ final class MainViewController: UIViewController {
         return v
     }()
     
-    var lifeTimer: Timer!
-    var autoTimer: Timer!
-    var saveTimer: Timer!
-    var playerData: [NSManagedObject] = []
-    var starData: [NSManagedObject] = []
-    
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
     
+    var viewModel: MainSceneViewModel
+    
+    init(viewModel: MainSceneViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        viewModel.eventsController.delegate = self
         if def.bool(forKey: "has_saved_data") == true {
-            loadPlayerData()
+            viewModel.playerDataController.loadPlayerData()
+            viewModel.starDataController.loadStarData()
             loadStar()
             createViews()
             setScene()
         } else {
-            createNewData()
-            myStar.creatNode()
+            viewModel.createNewData()
+            viewModel.starDataController.myStar.creatNode()
             createViews()
             setScene()
         }
-        createLifeTimer()
-        createAutoTimer()
-        createSaveTimer()
     }
     
     func activateConstraints() {
@@ -66,77 +70,18 @@ final class MainViewController: UIViewController {
         ])
     }
     
-    func createNewData() {
-        myPlayer = Player(energy: 0, boostValue: 1)
-        myStar = Star(name: "Proxima Centauri", zams: 0.8, energy: 100_000, maxEnergy: 100_000, rotationSpeed: 1, fuseRate: 1, isAlive: true, color: UIColor.red, node: SCNNode())
-    }
-    
-    func loadPlayerData() {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
-            return
-        }
-        let managedContext = appDelegate.persistentContainer.viewContext
-        let playerRequest = NSFetchRequest<NSManagedObject>(entityName: "PlayerData")
-        let starRequest = NSFetchRequest<NSManagedObject>(entityName: "StarData")
-        do {
-            playerData = try managedContext.fetch(playerRequest)
-            starData = try managedContext.fetch(starRequest)
-            myPlayer = Player(energy: getPlayerData("energy") as! Double,
-                              boostValue: getPlayerData("boostValue") as! Double)
-            let colors: [Float] = [getStarData("colorr") as! Float,
-                                   getStarData("colorg") as! Float,
-                                   getStarData("colorb") as! Float]
-            
-            myStar = Star(name: getStarData("name") as! String,
-                          zams: getStarData("zams") as! Double,
-                          energy: getStarData("energy") as! Double,
-                          maxEnergy: getStarData("maxEnergy") as! Double,
-                          rotationSpeed: getStarData("rotationSpeed") as! Double,
-                          fuseRate: getStarData("fuseRate") as! Double,
-                          isAlive: getStarData("isAlive") as! Bool,
-                          color: UIColor(red: CGFloat(colors[0]), green: CGFloat(colors[1]), blue: CGFloat(colors[2]), alpha: 1),
-                          node: SCNNode())
-        } catch let error as NSError {
-            print("Could not fetch. \(error), \(error.userInfo)")
-        }
-        
-    }
-    
-    func getStarData(_ obj: String) -> Any {
-        return starData[0].value(forKey: obj)!
-    }
-    
-    func getPlayerData(_ obj: String) -> Any {
-        return playerData[0].value(forKey: obj)!
-    }
-    
     func setScene() {
         sceneView.scene?.physicsWorld.gravity = SCNVector3Zero
         sceneView.allowsCameraControl = true
         sceneView.scene?.rootNode.childNode(withName: "camera", recursively: true)?.position = SCNVector3(0, 1.4, 4)
         sceneView.scene = SCNScene(named: "art.scnassets/MainScene.scn")
-        sceneView.scene?.rootNode.addChildNode(myStar.node)
-        myStar.node.runAction(SCNAction.repeatForever(SCNAction.rotateBy(x: 0, y: CGFloat(myStar.rotationSpeed), z: 0, duration: 1)))
-    }
-    
-    func createLifeTimer() {
-        lifeTimer = Timer(timeInterval: 0.1, target: self, selector: #selector(fireLifeTimer), userInfo: nil, repeats: true)
-        RunLoop.current.add(lifeTimer, forMode: .common)
-    }
-    
-    func createAutoTimer() {
-        autoTimer = Timer(timeInterval: 1, target: self, selector: #selector(fireAutoTimer), userInfo: nil, repeats: true)
-        RunLoop.current.add(autoTimer, forMode: .common)
-    }
-    
-    func createSaveTimer() {
-        saveTimer = Timer(timeInterval: 5, target: self, selector: #selector(saveData), userInfo: nil, repeats: true)
-        RunLoop.current.add(saveTimer, forMode: .common)
+        sceneView.scene?.rootNode.addChildNode(viewModel.starDataController.myStar.node)
+        viewModel.starDataController.myStar.node.runAction(SCNAction.repeatForever(SCNAction.rotateBy(x: 0, y: CGFloat(viewModel.starDataController.myStar.rotationSpeed), z: 0, duration: 1)))
     }
     
     func createViews() {
         energyLabel.font = .roundedFont(ofSize: 22, weight: .bold)
-        energyBar.progress = Float(myStar.energy / myStar.maxEnergy)
+        energyBar.progress = Float(viewModel.starDataController.myStar.energy / viewModel.starDataController.myStar.maxEnergy)
         updateLabels()
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
@@ -146,47 +91,57 @@ final class MainViewController: UIViewController {
     }
     
     func loadStar() {
-        myStar.node = SCNNode(geometry: SCNSphere(radius: 0.3))
-        myStar.node.scale = SCNVector3(getStarData("scalex") as! Float, getStarData("scaley") as! Float, getStarData("scalez") as! Float)
-        myStar.node.light?.intensity = 2_300
-        myStar.node.light?.type = .ambient
+        let scalex = viewModel.starDataController.getStarData("scalex") as! Float
+        let scaley = viewModel.starDataController.getStarData("scaley") as! Float
+        let scalez = viewModel.starDataController.getStarData("scalez") as! Float
+        viewModel.starDataController.myStar.node = SCNNode(geometry: SCNSphere(radius: 0.3))
+        viewModel.starDataController.myStar.node.scale = SCNVector3(scalex, scaley, scalez)
+        viewModel.starDataController.myStar.node.light?.intensity = 2_300
+        viewModel.starDataController.myStar.node.light?.type = .ambient
         let surface = SCNMaterial()
-        let surfaceImage = UIImage(named: "gray1")?.withTintColor(myStar.color)
+        let surfaceImage = UIImage(named: "gray1")?.withTintColor(viewModel.starDataController.myStar.color)
         surface.diffuse.contents = surfaceImage
-        myStar.node.geometry?.insertMaterial(surface, at: 0)
+        viewModel.starDataController.myStar.node.geometry?.insertMaterial(surface, at: 0)
         
+        createCorona(star: viewModel.starDataController.myStar)
+        createParticles(star: viewModel.starDataController.myStar)
+        
+    }
+    
+    func createCorona(star: Star) {
         let corona = SCNParticleSystem()
         corona.birthRate = 10_000
         corona.birthDirection = .random
-        corona.emitterShape = myStar.node.geometry
+        corona.emitterShape = star.node.geometry
         corona.particleLifeSpan = 1.5
         corona.particleVelocity = 0.03
         corona.speedFactor = 2.9
         corona.stretchFactor = 0.087
-        corona.particleColor = myStar.color
+        corona.particleColor = star.color
         corona.particleSize = 0.001
         corona.blendMode = .additive
+        star.node.addParticleSystem(corona)
+    }
+    
+    func createParticles(star: Star) {
         let starParticle = SCNParticleSystem()
         starParticle.birthRate = 25
         starParticle.birthDirection = .random
-        starParticle.emitterShape = myStar.node.geometry
+        starParticle.emitterShape = star.node.geometry
         starParticle.particleLifeSpan = 11
         starParticle.particleVelocity = 0.1
         starParticle.stretchFactor = 0.1
-        starParticle.particleColor = myStar.color
+        starParticle.particleColor = star.color
         starParticle.particleSize = 0.001
         starParticle.blendMode = .additive
-        
-        myStar.node.addParticleSystem(corona)
-        myStar.node.addParticleSystem(starParticle)
-        
+        star.node.addParticleSystem(starParticle)
     }
     
     @objc func reloadStar() {
-        sceneView.scene?.rootNode.addChildNode(myStar.node)
-        myStar.node.runAction(SCNAction.repeatForever(SCNAction.rotateBy(x: 0, y: CGFloat(myStar.rotationSpeed), z: 0, duration: 1)))
+        sceneView.scene?.rootNode.addChildNode(viewModel.starDataController.myStar.node)
+        viewModel.starDataController.myStar.node.runAction(SCNAction.repeatForever(SCNAction.rotateBy(x: 0, y: CGFloat(viewModel.starDataController.myStar.rotationSpeed), z: 0, duration: 1)))
         energyBar.progress = 1
-        createLifeTimer()
+        viewModel.eventsController.createLifeTimer()
     }
     
     func newText(_ text: String) {
@@ -207,39 +162,14 @@ final class MainViewController: UIViewController {
         }
     }
     
-    @objc func fireLifeTimer() {
-        if myStar.isAlive {
-            if myStar.energy - myStar.fuseRate >= 0 {
-                myStar.energy -= myStar.fuseRate
-                energyBar.progress = Float(myStar.energy / myStar.maxEnergy)
-            } else {
-                myStar.isAlive = false
-                myStar.energy = 0
-                energyBar.progress = 0
-                myStar.die()
-                lifeTimer.invalidate()
-            }
-        } else {
-            lifeTimer.invalidate()
-        }
-    }
-    
-    @objc func fireAutoTimer() {
-        if myStar.isAlive {
-            myPlayer.energy += myStar.fuseRate
-            newText(myStar.fuseRate.abbreviated)
-            updateLabels()
-        }
-    }
-    
     @objc func updateLabels() {
         energyLabel.text = myPlayer.energy.abbreviated
     }
     
     @objc func handleTap(_ gestureRecognize: UIGestureRecognizer) {
-        if myStar.isAlive {
+        if viewModel.starDataController.myStar.isAlive {
             myPlayer.energy += myPlayer.boostValue
-            myStar.energy -= myPlayer.boostValue / 4
+            viewModel.starDataController.myStar.energy -= myPlayer.boostValue / 4
             newText(myPlayer.boostValue.abbreviated)
             updateLabels()
             // check what nodes are tapped
@@ -294,41 +224,37 @@ final class MainViewController: UIViewController {
         }
     }
     
-    @objc func saveData() {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
-            return
+}
+
+extension MainViewController: EventsControllerDelegate {
+    func lifeTimerFired(timer: Timer) {
+        if viewModel.starDataController.myStar.isAlive {
+            if viewModel.starDataController.myStar.energy - viewModel.starDataController.myStar.fuseRate >= 0 {
+                viewModel.starDataController.myStar.energy -= viewModel.starDataController.myStar.fuseRate
+                energyBar.progress = Float(viewModel.starDataController.myStar.energy / viewModel.starDataController.myStar.maxEnergy)
+            } else {
+                viewModel.starDataController.myStar.isAlive = false
+                viewModel.starDataController.myStar.energy = 0
+                energyBar.progress = 0
+                viewModel.starDataController.myStar.die()
+                timer.invalidate()
+            }
+        } else {
+            timer.invalidate()
         }
-        let managedContext = appDelegate.persistentContainer.viewContext
-        if playerData.isEmpty {
-            let data = NSManagedObject(entity: NSEntityDescription.entity(forEntityName: "PlayerData", in: managedContext)!, insertInto: managedContext)
-            playerData.append(data)
+    }
+    
+    func autoTimerFired(timer: Timer) {
+        if viewModel.starDataController.myStar.isAlive {
+            myPlayer.energy += viewModel.starDataController.myStar.fuseRate
+            newText(viewModel.starDataController.myStar.fuseRate.abbreviated)
+            updateLabels()
         }
-        if starData.isEmpty {
-            let data = NSManagedObject(entity: NSEntityDescription.entity(forEntityName: "StarData", in: managedContext)!, insertInto: managedContext)
-            starData.append(data)
-        }
-        playerData[0].setValue(myPlayer.energy, forKey: "energy")
-        playerData[0].setValue(myPlayer.boostValue, forKey: "boostValue")
-        starData[0].setValue(Float(myStar.color.components.red), forKey: "colorr")
-        starData[0].setValue(Float(myStar.color.components.green), forKey: "colorg")
-        starData[0].setValue(Float(myStar.color.components.blue), forKey: "colorb")
-        starData[0].setValue(myStar.zams, forKey: "zams")
-        starData[0].setValue(myStar.rotationSpeed, forKey: "rotationSpeed")
-        starData[0].setValue(myStar.isAlive, forKey: "isAlive")
-        starData[0].setValue(myStar.name, forKey: "name")
-        starData[0].setValue(myStar.fuseRate, forKey: "fuseRate")
-        starData[0].setValue(myStar.energy, forKey: "energy")
-        starData[0].setValue(myStar.maxEnergy, forKey: "maxEnergy")
-        starData[0].setValue(myStar.node.scale.x, forKey: "scalex")
-        starData[0].setValue(myStar.node.scale.y, forKey: "scaley")
-        starData[0].setValue(myStar.node.scale.z, forKey: "scalez")
-        
-        do {
-            try managedContext.save()
-            def.set(true, forKey: "has_saved_data")
-        } catch let error as NSError {
-            print("Could not save. \(error), \(error.userInfo)")
-        }
+    }
+    
+    func saveTimerFired(timer: Timer) {
+        viewModel.playerDataController.saveData()
+        viewModel.starDataController.saveData()
     }
     
 }

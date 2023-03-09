@@ -11,6 +11,12 @@
 		457915092616BDFF00F9EBBE /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 457915072616BDFF00F9EBBE /* Model.xcdatamodeld */; };
 		45791511261799B000F9EBBE /* UIKitExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45791510261799B000F9EBBE /* UIKitExtensions.swift */; };
 		45C282CC2617F4340077E487 /* ShopViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C282CB2617F4340077E487 /* ShopViewController.swift */; };
+		45D06A9028E4BCCA00BD87B7 /* PlayerDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D06A8F28E4BCCA00BD87B7 /* PlayerDataController.swift */; };
+		45D06A9228E4BD3700BD87B7 /* EventsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D06A9128E4BD3700BD87B7 /* EventsController.swift */; };
+		45D06A9428E4BD5D00BD87B7 /* StarDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D06A9328E4BD5D00BD87B7 /* StarDataController.swift */; };
+		45D06A9628E4BE2600BD87B7 /* MainSceneViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D06A9528E4BE2600BD87B7 /* MainSceneViewModel.swift */; };
+		45D06A9828E4C6ED00BD87B7 /* CoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D06A9728E4C6ED00BD87B7 /* CoreData.swift */; };
+		45D06AE728E5C1C000BD87B7 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D06AE328E5C1C000BD87B7 /* Player.swift */; };
 		45EDA9F126180D1C00144C8E /* ShopItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45EDA9F026180D1C00144C8E /* ShopItem.swift */; };
 		45EDA9F5261810F700144C8E /* ShopTypeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45EDA9F4261810F700144C8E /* ShopTypeCell.swift */; };
 		45EDA9F92618113E00144C8E /* ShopItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45EDA9F82618113E00144C8E /* ShopItemCell.swift */; };
@@ -20,7 +26,6 @@
 		45F065492612F1FF00A729EF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 45F065482612F1FF00A729EF /* Assets.xcassets */; };
 		45F0654C2612F1FF00A729EF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 45F0654A2612F1FF00A729EF /* LaunchScreen.storyboard */; };
 		45F065552612F25200A729EF /* Star.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F065542612F25200A729EF /* Star.swift */; };
-		45F065592612F3A600A729EF /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F065582612F3A600A729EF /* Player.swift */; };
 		45F0655D2612F46100A729EF /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 45F0655C2612F46100A729EF /* art.scnassets */; };
 /* End PBXBuildFile section */
 
@@ -31,6 +36,12 @@
 		45791510261799B000F9EBBE /* UIKitExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIKitExtensions.swift; sourceTree = "<group>"; };
 		459DE8B926FE31120044CE7A /* Path to Singularity.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Path to Singularity.entitlements"; sourceTree = "<group>"; };
 		45C282CB2617F4340077E487 /* ShopViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopViewController.swift; sourceTree = "<group>"; };
+		45D06A8F28E4BCCA00BD87B7 /* PlayerDataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerDataController.swift; sourceTree = "<group>"; };
+		45D06A9128E4BD3700BD87B7 /* EventsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsController.swift; sourceTree = "<group>"; };
+		45D06A9328E4BD5D00BD87B7 /* StarDataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarDataController.swift; sourceTree = "<group>"; };
+		45D06A9528E4BE2600BD87B7 /* MainSceneViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainSceneViewModel.swift; sourceTree = "<group>"; };
+		45D06A9728E4C6ED00BD87B7 /* CoreData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreData.swift; sourceTree = "<group>"; };
+		45D06AE328E5C1C000BD87B7 /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		45EDA9F026180D1C00144C8E /* ShopItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopItem.swift; sourceTree = "<group>"; };
 		45EDA9F4261810F700144C8E /* ShopTypeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopTypeCell.swift; sourceTree = "<group>"; };
 		45EDA9F82618113E00144C8E /* ShopItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopItemCell.swift; sourceTree = "<group>"; };
@@ -42,7 +53,6 @@
 		45F0654B2612F1FF00A729EF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		45F0654D2612F1FF00A729EF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		45F065542612F25200A729EF /* Star.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Star.swift; sourceTree = "<group>"; };
-		45F065582612F3A600A729EF /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		45F0655C2612F46100A729EF /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -68,7 +78,7 @@
 		45C282C52617F39C0077E487 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				45F065582612F3A600A729EF /* Player.swift */,
+				45D06AE328E5C1C000BD87B7 /* Player.swift */,
 				45F065542612F25200A729EF /* Star.swift */,
 				45EDA9F026180D1C00144C8E /* ShopItem.swift */,
 			);
@@ -90,6 +100,18 @@
 				45791510261799B000F9EBBE /* UIKitExtensions.swift */,
 			);
 			path = Utlility;
+			sourceTree = "<group>";
+		};
+		45D06A8E28E4BCBA00BD87B7 /* Objects */ = {
+			isa = PBXGroup;
+			children = (
+				45D06A8F28E4BCCA00BD87B7 /* PlayerDataController.swift */,
+				45D06A9328E4BD5D00BD87B7 /* StarDataController.swift */,
+				45D06A9128E4BD3700BD87B7 /* EventsController.swift */,
+				45D06A9528E4BE2600BD87B7 /* MainSceneViewModel.swift */,
+				45D06A9728E4C6ED00BD87B7 /* CoreData.swift */,
+			);
+			path = Objects;
 			sourceTree = "<group>";
 		};
 		45EDA9F3261810DA00144C8E /* Views */ = {
@@ -129,6 +151,7 @@
 				45F065482612F1FF00A729EF /* Assets.xcassets */,
 				457915072616BDFF00F9EBBE /* Model.xcdatamodeld */,
 				45F0654D2612F1FF00A729EF /* Info.plist */,
+				45D06A8E28E4BCBA00BD87B7 /* Objects */,
 				45F0655C2612F46100A729EF /* art.scnassets */,
 				45EDA9F3261810DA00144C8E /* Views */,
 				45C282C92617F3DE0077E487 /* Utlility */,
@@ -211,12 +234,17 @@
 				45791511261799B000F9EBBE /* UIKitExtensions.swift in Sources */,
 				45EDA9F126180D1C00144C8E /* ShopItem.swift in Sources */,
 				45EDA9F5261810F700144C8E /* ShopTypeCell.swift in Sources */,
+				45D06A9828E4C6ED00BD87B7 /* CoreData.swift in Sources */,
+				45D06A9628E4BE2600BD87B7 /* MainSceneViewModel.swift in Sources */,
 				457915042616B7B700F9EBBE /* Constants.swift in Sources */,
 				45F065442612F1FE00A729EF /* MainViewController.swift in Sources */,
 				45C282CC2617F4340077E487 /* ShopViewController.swift in Sources */,
 				45F065402612F1FE00A729EF /* AppDelegate.swift in Sources */,
 				45F065422612F1FE00A729EF /* SceneDelegate.swift in Sources */,
-				45F065592612F3A600A729EF /* Player.swift in Sources */,
+				45D06A9028E4BCCA00BD87B7 /* PlayerDataController.swift in Sources */,
+				45D06A9228E4BD3700BD87B7 /* EventsController.swift in Sources */,
+				45D06AE728E5C1C000BD87B7 /* Player.swift in Sources */,
+				45D06A9428E4BD5D00BD87B7 /* StarDataController.swift in Sources */,
 				45EDA9F92618113E00144C8E /* ShopItemCell.swift in Sources */,
 				45F065552612F25200A729EF /* Star.swift in Sources */,
 				457915092616BDFF00F9EBBE /* Model.xcdatamodeld in Sources */,

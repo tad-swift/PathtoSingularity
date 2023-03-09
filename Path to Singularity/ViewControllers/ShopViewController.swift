@@ -28,48 +28,48 @@ final class ShopViewController: UIViewController {
         ShopItem(name: "Ran (Epsilon Eridani)", itemType: .star, price: 30_000, image: UIImage(named: "blue_star")!,
                  item: Star(name: "Alpha Centauri A", zams: 1.2, energy: 500_000,
                             maxEnergy: 500_000, rotationSpeed: 1, fuseRate: 10, isAlive: true,
-                            color: .red, node: SCNNode())),
+                            color: [1,0,0], node: SCNNode())),
         
         ShopItem(name: "Aldebaran (Alpha Tauri)", itemType: .star, price: 100_000, image: UIImage(named: "blue_star")!,
                  item: Star(name: "Aldebaran", zams: 1.2, energy: 500_000,
                             maxEnergy: 500_000, rotationSpeed: 1, fuseRate: 300, isAlive: true,
-                            color: .orange, node: SCNNode())),
+                            color: [1,0,0], node: SCNNode())),
         
         ShopItem(name: "Altair", itemType: .star, price: 1_000_000, image: UIImage(named: "blue_star")!,
                  item: Star(name: "Altair", zams: 1.79, energy: 10_000_000,
                             maxEnergy: 10_000_000, rotationSpeed: 1, fuseRate: 1000, isAlive: true,
-                            color: .white, node: SCNNode())),
+                            color: [1,1,1], node: SCNNode())),
         
         ShopItem(name: "T Tauri", itemType: .star, price: 6_000_000, image: UIImage(named: "blue_star")!,
                  item: Star(name: "T Tauri", zams: 2.12, energy: 100_000_000,
                             maxEnergy: 100_000_000, rotationSpeed: 1, fuseRate: 10000, isAlive: true,
-                            color: .yellow, node: SCNNode())),
+                            color: [1,0,0], node: SCNNode())),
         
         ShopItem(name: "Sagittarius A*", itemType: .star, price: 20_000_000, image: UIImage(named: "blue_star")!,
                  item: Star(name: "Sagittarius A*", zams: 4.154, energy: 100_000_000_000,
                             maxEnergy: 100_000_000_000, rotationSpeed: 1, fuseRate: 100_000, isAlive: true,
-                            color: .yellow, node: SCNNode())),
+                            color: [1,0,0], node: SCNNode())),
         
         ShopItem(name: "Bellatrix (Gamma Orionis)", itemType: .star, price: 100_000_000, image: UIImage(named: "blue_star")!,
                  item: Star(name: "Bellatrix", zams: 8.6, energy: 100_000_000_000,
                             maxEnergy: 100_000_000_000, rotationSpeed: 1, fuseRate: 1_000_000, isAlive: true,
-                            color: .cyan, node: SCNNode())),
+                            color: [0,0,1], node: SCNNode())),
         
         
         ShopItem(name: "Antares (Alpha Scorpii)", itemType: .star, price: 800_000_000, image: UIImage(named: "blue_star")!,
                  item: Star(name: "Antares", zams: 13, energy: 100_000_000_000,
                             maxEnergy: 100_000_000_000, rotationSpeed: 1, fuseRate: 10_000_000, isAlive: true,
-                            color: .blue, node: SCNNode())),
+                            color: [0,0,1], node: SCNNode())),
         
         ShopItem(name: "Betelgeuse", itemType: .star, price: 100_000_000, image: UIImage(named: "blue_star")!,
                  item: Star(name: "Betelgeuse", zams: 17, energy: 100_000_000_000,
                             maxEnergy: 100_000_000_000, rotationSpeed: 1, fuseRate: 100_000_000, isAlive: true,
-                            color: .red, node: SCNNode())),
+                            color: [1,0,0], node: SCNNode())),
         
         ShopItem(name: "Rigel (Beta Orionis)", itemType: .star, price: 100_000_000, image: UIImage(named: "blue_star")!,
                  item: Star(name: "Rigel", zams: 21, energy: 100_000_000_000,
                             maxEnergy: 100_000_000_000, rotationSpeed: 1, fuseRate: 1_000_000_000, isAlive: true,
-                            color: .blue, node: SCNNode())),
+                            color: [0,0,1], node: SCNNode())),
     ]
     
     var boostShopItems: [ShopItem] = [
@@ -149,9 +149,9 @@ extension ShopViewController {
                     case .star:
                         starShopItems[indexPath.row].price += (item.price / 20)
                         let star = item.item as! Star
-                        myStar.node.removeFromParentNode()
-                        myStar = star
-                        myStar.creatNode()
+//                        myStar.node.removeFromParentNode()
+//                        myStar = star
+//                        myStar.creatNode()
                         NotificationCenter.default.post(name: NSNotification.Name("reloadStar"), object: nil)
                 }
             }

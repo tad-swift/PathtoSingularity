@@ -8,5 +8,4 @@
 import UIKit
 
 var myPlayer: Player!
-var myStar: Star!
 let def = UserDefaults.standard
