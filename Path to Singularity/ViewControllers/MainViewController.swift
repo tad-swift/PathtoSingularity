@@ -7,10 +7,11 @@
 
 import UIKit
 import SceneKit
+import ARKit
 
 final class MainViewController: UIViewController {
     
-    let sceneView = SCNView()
+    var sceneView = SCNView()
     
     let energyLabel: UILabel = {
         let v = UILabel()
@@ -42,6 +43,7 @@ final class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        sceneView.delegate = self
         viewModel.eventsController.delegate = self
         activateConstraints()
         createViews()
@@ -51,6 +53,28 @@ final class MainViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         sceneView.frame = view.bounds
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        // Create a session configuration
+        let configuration = ARWorldTrackingConfiguration()
+        
+        // Run the view's session
+//        arView.session.run(configuration)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        // Pause the view's session
+//        arView.session.pause()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
     }
     
     func activateConstraints() {
@@ -67,13 +91,17 @@ final class MainViewController: UIViewController {
     }
     
     func setScene() {
-        sceneView.scene = SCNScene(named: "art.scnassets/MainScene.scn")
-        sceneView.scene?.physicsWorld.gravity = SCNVector3Zero
-        sceneView.allowsCameraControl = false
-        sceneView.scene?.rootNode.childNode(withName: "camera", recursively: true)?.position = SCNVector3(0, 1.4, 4)
+        sceneView.scene = SCNScene(named: "art.scnassets/MainScene.scn")!
+        sceneView.scene!.physicsWorld.gravity = SCNVector3Zero
+        sceneView.scene!.rootNode.childNode(withName: "camera", recursively: true)?.position = SCNVector3(0, 1.4, 4)
         
-        sceneView.scene?.rootNode.addChildNode(viewModel.myStar.node)
+        sceneView.scene!.rootNode.addChildNode(viewModel.myStar.node)
         viewModel.starDataController.myStar.node.runAction(SCNAction.repeatForever(SCNAction.rotateBy(x: 0, y: CGFloat(viewModel.myStar.rotationSpeed), z: 0, duration: 1)))
+        if viewModel.myStar.zams > 25 && !viewModel.myStar.isAlive {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
+                self.viewModel.myStar.performSuperNova()
+            }
+        }
     }
     
     func createViews() {
@@ -82,13 +110,13 @@ final class MainViewController: UIViewController {
         updateLabels()
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
-        sceneView.addGestureRecognizer(tapGesture)
+//        sceneView.addGestureRecognizer(tapGesture)
         NotificationCenter.default.addObserver(self, selector: #selector(updateLabels), name: NSNotification.Name(rawValue: "updateLabels"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(reloadStar), name: NSNotification.Name(rawValue: "reloadStar"), object: nil)
     }
     
     @objc func reloadStar() {
-        sceneView.scene?.rootNode.addChildNode(viewModel.starDataController.myStar.node)
+        sceneView.scene!.rootNode.addChildNode(viewModel.starDataController.myStar.node)
         viewModel.starDataController.myStar.node.runAction(SCNAction.repeatForever(SCNAction.rotateBy(x: 0, y: CGFloat(viewModel.starDataController.myStar.rotationSpeed), z: 0, duration: 1)))
         energyBar.progress = 1
         viewModel.eventsController.createLifeTimer()
@@ -207,4 +235,30 @@ extension MainViewController: EventsControllerDelegate {
         viewModel.starDataController.saveData()
     }
     
+}
+
+extension MainViewController: ARSCNViewDelegate {
+    /*
+     // Override to create and configure nodes for anchors added to the view's session.
+     func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
+     let node = SCNNode()
+     
+     return node
+     }
+     */
+    
+    func session(_ session: ARSession, didFailWithError error: Error) {
+        // Present an error message to the user
+        
+    }
+    
+    func sessionWasInterrupted(_ session: ARSession) {
+        // Inform the user that the session has been interrupted, for example, by presenting an overlay
+        
+    }
+    
+    func sessionInterruptionEnded(_ session: ARSession) {
+        // Reset tracking and/or remove existing anchors if consistent tracking is required
+        
+    }
 }

@@ -184,7 +184,6 @@ extension Star {
         starParticle2.particleSize = 0.001
         starParticle2.blendMode = .additive
         DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
-            self.node.removeAllParticleSystems()
             if self.zams > 20 {
                 self.createBlackHole()
             } else {
@@ -199,6 +198,7 @@ extension Star {
     }
     
     func becomeWhiteDwarf() {
+        self.node.removeAllParticleSystems()
         SCNTransaction.begin()
         SCNTransaction.animationDuration = 5
         
@@ -266,14 +266,45 @@ extension Star {
     }
     
     func createBlackHole() {
+        self.node.removeAllParticleSystems()
         self.node.geometry?.firstMaterial?.diffuse.contents = UIColor.black
         self.node.light?.intensity = 0
         let bhScene = SCNScene(named: "art.scnassets/BlackHole.scn")!
         let bh = bhScene.rootNode.childNode(withName: "BlackHole", recursively: true)!
-        //bh.scale = SCNVector3(1, 1, 1)
+        bh.runAction(SCNAction.repeatForever(SCNAction.rotateBy(x: 0, y: 3, z: 0, duration: 0.3)))
         self.node.addChildNode(bh)
-        //self.node.runAction(SCNAction.scale(by: 40, duration: 2))
     }
+    
+    func createBlackHoleParticles() -> SCNParticleSystem {
+        let particleSystem = SCNParticleSystem()
+        
+        // Configure the particle system
+        particleSystem.birthRate = 300
+        particleSystem.particleLifeSpan = 5.0
+        particleSystem.particleLifeSpanVariation = 1.0
+        particleSystem.emissionDuration = .greatestFiniteMagnitude
+        particleSystem.loops = true
+        particleSystem.particleSize = 0.02
+        particleSystem.particleVelocity = 50
+        particleSystem.particleVelocityVariation = 10
+        particleSystem.spreadingAngle = 180
+        particleSystem.emittingDirection = SCNVector3(0, 0, -1)
+        
+        // Set the particle appearance
+        particleSystem.particleColor = .white
+        particleSystem.blendMode = .additive
+//        particleSystem.opacityVariation = 0.2
+        particleSystem.particleIntensity = 1.0
+        particleSystem.particleIntensityVariation = 0.5
+        
+        // Use a radial force field to attract particles towards the center
+        let forceField = SCNPhysicsField.radialGravity()
+        forceField.strength = -3.0
+//        particleSystem.addPhysicsField(forceField)
+        
+        return particleSystem
+    }
+
     
     func neutronJet(_ position: SCNVector3 = SCNVector3(0, 0, 0)) -> SCNNode {
         let node = SCNNode()

@@ -147,7 +147,6 @@ extension ShopViewController {
         
     }
     
-    
 }
 
 // MARK: - CollectionView Layout
