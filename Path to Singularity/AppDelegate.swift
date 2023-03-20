@@ -11,9 +11,6 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        if def.object(forKey: "has_saved_data") == nil {
-            def.set(false, forKey: "has_saved_data")
-        }
         return true
     }
 
@@ -32,7 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func applicationWillTerminate(_ application: UIApplication) {
-        CoreData.shared.saveContext()
+        
     }
 
 

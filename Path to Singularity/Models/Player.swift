@@ -1,5 +1,5 @@
 //
-//  Player+CoreDataClass.swift
+//  Player.swift
 //  Path to Singularity
 //
 //  Created by Tadreik Campbell on 9/29/22.
@@ -7,21 +7,29 @@
 //
 
 import Foundation
-import CoreData
 
-@objc(Player)
-public class Player: NSManagedObject, Identifiable {
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<Player> {
-        return NSFetchRequest<Player>(entityName: "Player")
+class Player: NSObject, NSSecureCoding {
+    static var supportsSecureCoding: Bool {
+        return true
     }
     
-    @NSManaged public var boostValue: Double
-    @NSManaged public var energy: Double
+    var boostValue: Double
+    var energy: Double
     
-    init(boostValue: Double, energy: Double) {
-        super.init(entity: NSEntityDescription(), insertInto: CoreData.shared.managedContext)
+    init(boostValue: Double = 1, energy: Double = 0) {
         self.boostValue = boostValue
         self.energy = energy
     }
     
+    required init?(coder aDecoder: NSCoder) {
+        self.boostValue = aDecoder.decodeDouble(forKey: "boostValue")
+        self.energy = aDecoder.decodeDouble(forKey: "energy")
+        super.init()
+    }
+    
+    func encode(with aCoder: NSCoder) {
+        aCoder.encode(boostValue, forKey: "boostValue")
+        aCoder.encode(energy, forKey: "energy")
+    }
 }
+

@@ -8,81 +8,115 @@
 import Foundation
 import UIKit
 import SceneKit
-import CoreData
 
-@objc(Star)
-public class Star: NSManagedObject, Identifiable {
-    
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<Star> {
-        return NSFetchRequest<Star>(entityName: "Star")
+
+class Star: NSObject, NSSecureCoding {
+    static var supportsSecureCoding: Bool {
+        true
     }
     
-    @NSManaged public var colorb: Float
-    @NSManaged public var colorg: Float
-    @NSManaged public var colorr: Float
-    @NSManaged public var energy: Double
-    @NSManaged public var fuseRate: Double
-    @NSManaged public var isAlive: Bool
-    @NSManaged public var maxEnergy: Double
-    @NSManaged public var name: String?
-    @NSManaged public var rotationSpeed: Double
-    @NSManaged public var scalex: Float
-    @NSManaged public var scaley: Float
-    @NSManaged public var scalez: Float
-    @NSManaged public var zams: Double
+    var energy: Double
+    var fuseRate: Double
+    var isAlive: Bool
+    var maxEnergy: Double
+    var name: String?
+    var rotationSpeed: Double
+    var scalex: Float
+    var scaley: Float
+    var scalez: Float
+    var zams: Double
+    var color: UIColor
+    var node: SCNNode
     
-    var color: UIColor {
-        UIColor(red: CGFloat(colorr), green: CGFloat(colorg), blue: CGFloat(colorb), alpha: 1)
-    }
-    var node: SCNNode = SCNNode() // used to reference/modify the node
-    
-    public init(name: String, zams: Double, energy: Double, maxEnergy: Double, rotationSpeed: Double, fuseRate: Double, isAlive: Bool, color: [Float], node: SCNNode) {
-        super.init(entity: NSEntityDescription(), insertInto: CoreData.shared.managedContext)
-        self.name = name
-        self.zams = zams
+    internal init(energy: Double, fuseRate: Double, isAlive: Bool = true, maxEnergy: Double, name: String? = nil, rotationSpeed: Double = 1, scalex: Float = 1, scaley: Float = 1, scalez: Float = 1, zams: Double = 0.8, color: UIColor = .red, node: SCNNode = SCNNode()) {
         self.energy = energy
-        self.maxEnergy = maxEnergy
-        self.rotationSpeed = rotationSpeed
         self.fuseRate = fuseRate
         self.isAlive = isAlive
-        self.colorr = color[0]
-        self.colorg = color[1]
-        self.colorb = color[2]
+        self.maxEnergy = maxEnergy
+        self.name = name
+        self.rotationSpeed = rotationSpeed
+        self.scalex = scalex
+        self.scaley = scaley
+        self.scalez = scalez
+        self.zams = zams
+        self.color = color
         self.node = node
     }
     
-    func creatNode(radius: CGFloat = 0.3, surfaceImageString: String = "gray1") {
-        node = SCNNode(geometry: SCNSphere(radius: radius))
-        node.light?.intensity = 2_700
-        node.light?.type = .ambient
-        let surface = SCNMaterial()
-        var surfaceImage: UIImage!
-        switch color {
-            case .red:
-                surfaceImage = UIImage(named: surfaceImageString)!
-            case .orange:
-                surfaceImage = UIImage(named: surfaceImageString)!
-            case .yellow:
-                surfaceImage = UIImage(named: surfaceImageString)!
-            case .white:
-                surfaceImage = UIImage(named: surfaceImageString)!
-            case .cyan:
-                surfaceImage = UIImage(named: surfaceImageString)!
-            case .blue:
-                surfaceImage = UIImage(named: surfaceImageString)!
-            default:
-                surfaceImage = UIImage(named: surfaceImageString)!
+    required init?(coder: NSCoder) {
+        guard let node = coder.decodeObject(of: SCNNode.self, forKey: "node") else {
+            return nil
         }
-        surface.diffuse.contents = surfaceImage
-        node.geometry?.insertMaterial(surface, at: 0)
-        node.scale = SCNVector3(1, 1, 1)
-        node.addParticleSystem(createCorona())
-        node.addParticleSystem(createStarParticle())
+        
+        self.node = node
+        self.energy = coder.decodeDouble(forKey: "energy")
+        self.fuseRate = coder.decodeDouble(forKey: "fuseRate")
+        self.isAlive = coder.decodeBool(forKey: "isAlive")
+        self.maxEnergy = coder.decodeDouble(forKey: "maxEnergy")
+        self.name = coder.decodeObject(of: NSString.self, forKey: "name") as String?
+        self.rotationSpeed = coder.decodeDouble(forKey: "rotationSpeed")
+        self.scalex = coder.decodeFloat(forKey: "scalex")
+        self.scaley = coder.decodeFloat(forKey: "scaley")
+        self.scalez = coder.decodeFloat(forKey: "scalez")
+        self.zams = coder.decodeDouble(forKey: "zams")
+        self.color = coder.decodeObject(of: UIColor.self, forKey: "color") ?? .red
+        super.init()
+    }
+    
+    func encode(with aCoder: NSCoder) {
+        aCoder.encode(node, forKey: "node")
+        aCoder.encode(energy, forKey: "energy")
+        aCoder.encode(fuseRate, forKey: "fuseRate")
+        aCoder.encode(isAlive, forKey: "isAlive")
+        aCoder.encode(maxEnergy, forKey: "maxEnergy")
+        aCoder.encode(name, forKey: "name")
+        aCoder.encode(rotationSpeed, forKey: "rotationSpeed")
+        aCoder.encode(scalex, forKey: "scalex")
+        aCoder.encode(scaley, forKey: "scaley")
+        aCoder.encode(scalez, forKey: "scalez")
+        aCoder.encode(zams, forKey: "zams")
+        aCoder.encode(color, forKey: "color")
     }
     
 }
 
 extension Star {
+    
+    func creatNode(radius: CGFloat = 0.3, surfaceImageString: String = "gray1") {
+        node = SCNNode(geometry: SCNSphere(radius: radius))
+        let surface = SCNMaterial()
+        var surfaceImage = UIImage(named: surfaceImageString)!
+        
+        if let colorFilter = CIFilter(name: "CIMultiplyCompositing"),
+           let inputColor = CIFilter(name: "CIConstantColorGenerator") {
+            let ciSurfaceImage = CIImage(image: surfaceImage)
+            inputColor.setValue(CIColor(color: color), forKey: kCIInputColorKey)
+            colorFilter.setValue(inputColor.outputImage, forKey: kCIInputImageKey)
+            colorFilter.setValue(ciSurfaceImage, forKey: kCIInputBackgroundImageKey)
+            
+            if let outputImage = colorFilter.outputImage {
+                let context = CIContext(options: nil)
+                if let cgImage = context.createCGImage(outputImage, from: outputImage.extent) {
+                    surfaceImage = UIImage(cgImage: cgImage)
+                }
+            }
+        }
+        
+        surface.diffuse.contents = surfaceImage
+        surface.emission.contents = color
+        surface.emission.intensity = 0.1
+        let lightNode = SCNNode()
+        lightNode.light = SCNLight()
+        lightNode.light?.type = .omni
+        lightNode.light?.color = color
+        lightNode.light?.intensity = 2700
+        node.addChildNode(lightNode)
+        
+        node.geometry?.insertMaterial(surface, at: 0)
+        node.scale = SCNVector3(1, 1, 1)
+        node.addParticleSystem(createCorona())
+        node.addParticleSystem(createStarParticle())
+    }
     
     func createCorona() -> SCNParticleSystem {
         let corona = SCNParticleSystem()
@@ -101,11 +135,11 @@ extension Star {
     
     func createStarParticle() -> SCNParticleSystem {
         let starParticle = SCNParticleSystem()
-        starParticle.birthRate = 25
+        starParticle.birthRate = 400
         starParticle.birthDirection = .random
         starParticle.emitterShape = node.geometry
         starParticle.particleLifeSpan = 11
-        starParticle.particleVelocity = 0.1
+        starParticle.particleVelocity = 0.4
         starParticle.stretchFactor = 0.1
         starParticle.particleColor = color
         starParticle.particleSize = 0.001
@@ -118,14 +152,13 @@ extension Star {
         case 0..<0.5:
             becomeWhiteDwarf()
         case 0.5..<8:
-            becomeRedGiant { [unowned self] in
+            becomeRedGiant {
                 self.becomeWhiteDwarf()
             }
         case 8...100_000_000_000:
             performSuperNova()
         default:
             becomeWhiteDwarf()
-            
         }
     }
     

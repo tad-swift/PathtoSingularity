@@ -7,7 +7,6 @@
 
 import UIKit
 import SceneKit
-import CoreData
 
 final class MainViewController: UIViewController {
     
@@ -42,23 +41,20 @@ final class MainViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .white
         viewModel.eventsController.delegate = self
-        if def.bool(forKey: "has_saved_data") == true {
-            viewModel.playerDataController.loadPlayerData()
-            viewModel.starDataController.loadStarData()
-            loadStar()
-            createViews()
-            setScene()
-        } else {
-            viewModel.createNewData()
-            viewModel.starDataController.myStar.creatNode()
-            createViews()
-            setScene()
-        }
+        activateConstraints()
+        createViews()
+        setScene()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        sceneView.frame = view.bounds
     }
     
     func activateConstraints() {
-        sceneView.frame = view.bounds
+        
         view.addSubviews(sceneView, energyBar, energyLabel)
         NSLayoutConstraint.activate([
             energyBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
@@ -71,12 +67,13 @@ final class MainViewController: UIViewController {
     }
     
     func setScene() {
-        sceneView.scene?.physicsWorld.gravity = SCNVector3Zero
-        sceneView.allowsCameraControl = true
-        sceneView.scene?.rootNode.childNode(withName: "camera", recursively: true)?.position = SCNVector3(0, 1.4, 4)
         sceneView.scene = SCNScene(named: "art.scnassets/MainScene.scn")
-        sceneView.scene?.rootNode.addChildNode(viewModel.starDataController.myStar.node)
-        viewModel.starDataController.myStar.node.runAction(SCNAction.repeatForever(SCNAction.rotateBy(x: 0, y: CGFloat(viewModel.starDataController.myStar.rotationSpeed), z: 0, duration: 1)))
+        sceneView.scene?.physicsWorld.gravity = SCNVector3Zero
+        sceneView.allowsCameraControl = false
+        sceneView.scene?.rootNode.childNode(withName: "camera", recursively: true)?.position = SCNVector3(0, 1.4, 4)
+        
+        sceneView.scene?.rootNode.addChildNode(viewModel.myStar.node)
+        viewModel.starDataController.myStar.node.runAction(SCNAction.repeatForever(SCNAction.rotateBy(x: 0, y: CGFloat(viewModel.myStar.rotationSpeed), z: 0, duration: 1)))
     }
     
     func createViews() {
@@ -88,53 +85,6 @@ final class MainViewController: UIViewController {
         sceneView.addGestureRecognizer(tapGesture)
         NotificationCenter.default.addObserver(self, selector: #selector(updateLabels), name: NSNotification.Name(rawValue: "updateLabels"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(reloadStar), name: NSNotification.Name(rawValue: "reloadStar"), object: nil)
-    }
-    
-    func loadStar() {
-        let scalex = viewModel.starDataController.getStarData("scalex") as! Float
-        let scaley = viewModel.starDataController.getStarData("scaley") as! Float
-        let scalez = viewModel.starDataController.getStarData("scalez") as! Float
-        viewModel.starDataController.myStar.node = SCNNode(geometry: SCNSphere(radius: 0.3))
-        viewModel.starDataController.myStar.node.scale = SCNVector3(scalex, scaley, scalez)
-        viewModel.starDataController.myStar.node.light?.intensity = 2_300
-        viewModel.starDataController.myStar.node.light?.type = .ambient
-        let surface = SCNMaterial()
-        let surfaceImage = UIImage(named: "gray1")?.withTintColor(viewModel.starDataController.myStar.color)
-        surface.diffuse.contents = surfaceImage
-        viewModel.starDataController.myStar.node.geometry?.insertMaterial(surface, at: 0)
-        
-        createCorona(star: viewModel.starDataController.myStar)
-        createParticles(star: viewModel.starDataController.myStar)
-        
-    }
-    
-    func createCorona(star: Star) {
-        let corona = SCNParticleSystem()
-        corona.birthRate = 10_000
-        corona.birthDirection = .random
-        corona.emitterShape = star.node.geometry
-        corona.particleLifeSpan = 1.5
-        corona.particleVelocity = 0.03
-        corona.speedFactor = 2.9
-        corona.stretchFactor = 0.087
-        corona.particleColor = star.color
-        corona.particleSize = 0.001
-        corona.blendMode = .additive
-        star.node.addParticleSystem(corona)
-    }
-    
-    func createParticles(star: Star) {
-        let starParticle = SCNParticleSystem()
-        starParticle.birthRate = 25
-        starParticle.birthDirection = .random
-        starParticle.emitterShape = star.node.geometry
-        starParticle.particleLifeSpan = 11
-        starParticle.particleVelocity = 0.1
-        starParticle.stretchFactor = 0.1
-        starParticle.particleColor = star.color
-        starParticle.particleSize = 0.001
-        starParticle.blendMode = .additive
-        star.node.addParticleSystem(starParticle)
     }
     
     @objc func reloadStar() {
@@ -163,14 +113,14 @@ final class MainViewController: UIViewController {
     }
     
     @objc func updateLabels() {
-        energyLabel.text = myPlayer.energy.abbreviated
+        energyLabel.text = viewModel.myPlayer.energy.abbreviated
     }
     
     @objc func handleTap(_ gestureRecognize: UIGestureRecognizer) {
         if viewModel.starDataController.myStar.isAlive {
-            myPlayer.energy += myPlayer.boostValue
-            viewModel.starDataController.myStar.energy -= myPlayer.boostValue / 4
-            newText(myPlayer.boostValue.abbreviated)
+            viewModel.myPlayer.energy += viewModel.myPlayer.boostValue
+            viewModel.starDataController.myStar.energy -= viewModel.myPlayer.boostValue / 4
+            newText(viewModel.myPlayer.boostValue.abbreviated)
             updateLabels()
             // check what nodes are tapped
             let p = gestureRecognize.location(in: sceneView)
@@ -186,17 +136,17 @@ final class MainViewController: UIViewController {
                 SCNTransaction.completionBlock = {
                     SCNTransaction.begin()
                     SCNTransaction.animationDuration = 0.1
-                    result.node.particleSystems?[1].birthRate = 25
+                    result.node.particleSystems?[1].birthRate = 400
                     //result.node.geometry?.firstMaterial?.emission.contents = self.myStar.color
                     SCNTransaction.commit()
                 }
-                result.node.particleSystems?[1].birthRate = 1_000
+                result.node.particleSystems?[1].birthRate = 4_000
                 //result.node.geometry?.firstMaterial?.emission.contents = UIColor.darkGray
                 SCNTransaction.commit()
             }
         } else {
-            let val = myPlayer.boostValue / 10
-            myPlayer.energy += val
+            let val = viewModel.myPlayer.boostValue / 10
+            viewModel.myPlayer.energy += val
             newText(val.abbreviated)
             updateLabels()
             // check what nodes are tapped
@@ -246,7 +196,7 @@ extension MainViewController: EventsControllerDelegate {
     
     func autoTimerFired(timer: Timer) {
         if viewModel.starDataController.myStar.isAlive {
-            myPlayer.energy += viewModel.starDataController.myStar.fuseRate
+            viewModel.myPlayer.energy += viewModel.starDataController.myStar.fuseRate
             newText(viewModel.starDataController.myStar.fuseRate.abbreviated)
             updateLabels()
         }
