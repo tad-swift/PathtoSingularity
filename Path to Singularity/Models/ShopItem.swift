@@ -7,29 +7,29 @@
 
 import UIKit
 
-struct ShopItem: Hashable {
-    
+protocol ShopItem {
+    var name: String { get }
+    var price: Double { get }
+    var image: UIImage { get }
+    var id: String { get }
+}
+
+struct BoostItem: ShopItem, Identifiable {
     let name: String
-    let itemType: ItemType
-    var price: Double
+    let price: Double
     let image: UIImage
-    let item: Any
-    
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(price)
-    }
-    
-    static func == (lhs: ShopItem, rhs: ShopItem) -> Bool {
-        lhs.price == rhs.price && lhs.name == rhs.name
+    let bonusEnergy: Double
+    var id: String {
+        name
     }
 }
 
-struct BoostItem {
+struct StarItem: ShopItem, Identifiable {
     let name: String
-    let value: Double
-}
-
-enum ItemType: CaseIterable {
-    case star
-    case boostItem
+    let price: Double
+    let image: UIImage
+    var star: Star
+    var id: String {
+        name
+    }
 }

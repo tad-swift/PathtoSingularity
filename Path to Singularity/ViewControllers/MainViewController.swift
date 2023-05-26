@@ -59,7 +59,7 @@ final class MainViewController: UIViewController {
         super.viewWillAppear(animated)
         
         // Create a session configuration
-        let configuration = ARWorldTrackingConfiguration()
+//        let configuration = ARWorldTrackingConfiguration()
         
         // Run the view's session
 //        arView.session.run(configuration)
@@ -223,9 +223,9 @@ extension MainViewController: EventsControllerDelegate {
     }
     
     func autoTimerFired(timer: Timer) {
-        if viewModel.starDataController.myStar.isAlive {
-            viewModel.myPlayer.energy += viewModel.starDataController.myStar.fuseRate
-            newText(viewModel.starDataController.myStar.fuseRate.abbreviated)
+        if viewModel.myStar.isAlive {
+            viewModel.myPlayer.energy += viewModel.myStar.fuseRate
+            newText(viewModel.myStar.fuseRate.abbreviated)
             updateLabels()
         }
     }

@@ -7,7 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		451A903129C7CC710001CA76 /* ShopViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C282CB2617F4340077E487 /* ShopViewController.swift */; };
+		4509B7172A21521400A877A1 /* ShopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4509B7162A21521400A877A1 /* ShopView.swift */; };
+		4509B7192A2152F500A877A1 /* ShopDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4509B7182A2152F500A877A1 /* ShopDataProvider.swift */; };
 		451A903329C7DDD00001CA76 /* FileStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451A903229C7DDD00001CA76 /* FileStorage.swift */; };
 		451A903529C7F57C0001CA76 /* SceneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451A903429C7F57C0001CA76 /* SceneView.swift */; };
 		45791511261799B000F9EBBE /* UIKitExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45791510261799B000F9EBBE /* UIKitExtensions.swift */; };
@@ -29,12 +30,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4509B7162A21521400A877A1 /* ShopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopView.swift; sourceTree = "<group>"; };
+		4509B7182A2152F500A877A1 /* ShopDataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopDataProvider.swift; sourceTree = "<group>"; };
 		451A903229C7DDD00001CA76 /* FileStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileStorage.swift; sourceTree = "<group>"; };
 		451A903429C7F57C0001CA76 /* SceneView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneView.swift; sourceTree = "<group>"; };
-		457915002616AEF300F9EBBE /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
 		45791510261799B000F9EBBE /* UIKitExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIKitExtensions.swift; sourceTree = "<group>"; };
 		459DE8B926FE31120044CE7A /* Path to Singularity.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Path to Singularity.entitlements"; sourceTree = "<group>"; };
-		45C282CB2617F4340077E487 /* ShopViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopViewController.swift; sourceTree = "<group>"; };
 		45D06A8F28E4BCCA00BD87B7 /* PlayerDataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerDataController.swift; sourceTree = "<group>"; };
 		45D06A9128E4BD3700BD87B7 /* EventsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsController.swift; sourceTree = "<group>"; };
 		45D06A9328E4BD5D00BD87B7 /* StarDataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarDataController.swift; sourceTree = "<group>"; };
@@ -68,7 +69,6 @@
 		457914FF2616AEF300F9EBBE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				457915002616AEF300F9EBBE /* GameKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -87,7 +87,7 @@
 			isa = PBXGroup;
 			children = (
 				45F065432612F1FE00A729EF /* MainViewController.swift */,
-				45C282CB2617F4340077E487 /* ShopViewController.swift */,
+				4509B7162A21521400A877A1 /* ShopView.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -109,6 +109,7 @@
 				45D06A9528E4BE2600BD87B7 /* MainSceneViewModel.swift */,
 				451A903229C7DDD00001CA76 /* FileStorage.swift */,
 				451A903429C7F57C0001CA76 /* SceneView.swift */,
+				4509B7182A2152F500A877A1 /* ShopDataProvider.swift */,
 			);
 			path = Objects;
 			sourceTree = "<group>";
@@ -234,6 +235,7 @@
 				451A903529C7F57C0001CA76 /* SceneView.swift in Sources */,
 				45D06A9628E4BE2600BD87B7 /* MainSceneViewModel.swift in Sources */,
 				45F065442612F1FE00A729EF /* MainViewController.swift in Sources */,
+				4509B7172A21521400A877A1 /* ShopView.swift in Sources */,
 				45F065402612F1FE00A729EF /* AppDelegate.swift in Sources */,
 				45F065422612F1FE00A729EF /* SceneDelegate.swift in Sources */,
 				45D06A9028E4BCCA00BD87B7 /* PlayerDataController.swift in Sources */,
@@ -241,8 +243,8 @@
 				45D06AE728E5C1C000BD87B7 /* Player.swift in Sources */,
 				451A903329C7DDD00001CA76 /* FileStorage.swift in Sources */,
 				45D06A9428E4BD5D00BD87B7 /* StarDataController.swift in Sources */,
-				451A903129C7CC710001CA76 /* ShopViewController.swift in Sources */,
 				45EDA9F92618113E00144C8E /* ShopItemCell.swift in Sources */,
+				4509B7192A2152F500A877A1 /* ShopDataProvider.swift in Sources */,
 				45F065552612F25200A729EF /* Star.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
