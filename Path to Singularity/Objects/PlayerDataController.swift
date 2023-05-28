@@ -7,9 +7,13 @@
 
 import UIKit
 
-class PlayerDataController: ObservableObject {
+class PlayerDataController {
     
     var myPlayer: Player!
+    
+    init() {
+        loadPlayerData()
+    }
     
     func loadPlayerData() {
         if let player = FileStorage.shared.getPlayer() {
@@ -20,6 +24,6 @@ class PlayerDataController: ObservableObject {
     }
     
     func saveData() {
-        FileStorage.shared.save(player: myPlayer)
+        FileStorage.shared.save(myPlayer)
     }
 }

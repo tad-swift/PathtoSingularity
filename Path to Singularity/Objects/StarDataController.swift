@@ -8,9 +8,13 @@
 import UIKit
 import SceneKit
 
-class StarDataController: ObservableObject {
+class StarDataController {
     
     var myStar: Star!
+    
+    init() {
+        loadStarData()
+    }
     
     func loadStarData() {
         if let star = FileStorage.shared.getStar() {
@@ -22,7 +26,7 @@ class StarDataController: ObservableObject {
     }
     
     func saveData() {
-        FileStorage.shared.save(star: myStar)
+        FileStorage.shared.save(myStar)
     }
     
 }

@@ -26,7 +26,7 @@ final class MainViewController: UIViewController {
     }()
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
+        .lightContent
     }
     
     var viewModel: MainSceneViewModel
@@ -110,7 +110,7 @@ final class MainViewController: UIViewController {
         updateLabels()
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
-//        sceneView.addGestureRecognizer(tapGesture)
+        sceneView.addGestureRecognizer(tapGesture)
         NotificationCenter.default.addObserver(self, selector: #selector(updateLabels), name: NSNotification.Name(rawValue: "updateLabels"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(reloadStar), name: NSNotification.Name(rawValue: "reloadStar"), object: nil)
     }
@@ -145,9 +145,9 @@ final class MainViewController: UIViewController {
     }
     
     @objc func handleTap(_ gestureRecognize: UIGestureRecognizer) {
-        if viewModel.starDataController.myStar.isAlive {
+        if viewModel.myStar.isAlive {
             viewModel.myPlayer.energy += viewModel.myPlayer.boostValue
-            viewModel.starDataController.myStar.energy -= viewModel.myPlayer.boostValue / 4
+            viewModel.myStar.energy -= viewModel.myPlayer.boostValue / 4
             newText(viewModel.myPlayer.boostValue.abbreviated)
             updateLabels()
             // check what nodes are tapped
@@ -206,15 +206,15 @@ final class MainViewController: UIViewController {
 
 extension MainViewController: EventsControllerDelegate {
     func lifeTimerFired(timer: Timer) {
-        if viewModel.starDataController.myStar.isAlive {
-            if viewModel.starDataController.myStar.energy - viewModel.starDataController.myStar.fuseRate >= 0 {
-                viewModel.starDataController.myStar.energy -= viewModel.starDataController.myStar.fuseRate
-                energyBar.progress = Float(viewModel.starDataController.myStar.energy / viewModel.starDataController.myStar.maxEnergy)
+        if viewModel.myStar.isAlive {
+            if viewModel.myStar.energy - viewModel.myStar.fuseRate >= 0 {
+                viewModel.myStar.energy -= viewModel.myStar.fuseRate
+                energyBar.progress = Float(viewModel.myStar.energy / viewModel.myStar.maxEnergy)
             } else {
-                viewModel.starDataController.myStar.isAlive = false
-                viewModel.starDataController.myStar.energy = 0
+                viewModel.myStar.isAlive = false
+                viewModel.myStar.energy = 0
                 energyBar.progress = 0
-                viewModel.starDataController.myStar.die()
+                viewModel.myStar.die()
                 timer.invalidate()
             }
         } else {
@@ -231,8 +231,7 @@ extension MainViewController: EventsControllerDelegate {
     }
     
     func saveTimerFired(timer: Timer) {
-        viewModel.playerDataController.saveData()
-        viewModel.starDataController.saveData()
+        viewModel.saveData()
     }
     
 }

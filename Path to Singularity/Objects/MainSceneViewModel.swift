@@ -6,27 +6,33 @@
 //
 
 import UIKit
-import SceneKit
 
+@dynamicMemberLookup
 class MainSceneViewModel: ObservableObject {
     
     let eventsController = EventsController()
-    var playerDataController: PlayerDataController
-    var starDataController: StarDataController
-    
-    var myPlayer: Player {
-        playerDataController.myPlayer
-    }
-    
-    var myStar: Star {
-        starDataController.myStar
-    }
+    let playerDataController: PlayerDataController
+    let starDataController: StarDataController
     
     init(playerDataController: PlayerDataController, starDataController: StarDataController) {
         self.playerDataController = playerDataController
         self.starDataController = starDataController
-        playerDataController.loadPlayerData()
-        starDataController.loadStarData()
     }
     
+    func saveData() {
+        playerDataController.saveData()
+        starDataController.saveData()
+    }
+    
+    subscript<T>(dynamicMember keyPath: KeyPath<PlayerDataController, T>) -> T {
+        return playerDataController[keyPath: keyPath]
+    }
+    
+    subscript<T>(dynamicMember keyPath: KeyPath<StarDataController, T>) -> T {
+        return starDataController[keyPath: keyPath]
+    }
+    
+    subscript<T>(dynamicMember keyPath: KeyPath<EventsController, T>) -> T {
+        return eventsController[keyPath: keyPath]
+    }
 }

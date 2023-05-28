@@ -14,12 +14,14 @@ final class FileStorage {
     let starDir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("StarData")
     let playerDir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("PlayerData")
     
-    func save(star: Star) {
+    private init() {}
+    
+    func save(_ star: Star) {
         let starData = try? NSKeyedArchiver.archivedData(withRootObject: star, requiringSecureCoding: true)
         try? starData?.write(to: starDir)
     }
     
-    func save(player: Player) {
+    func save(_ player: Player) {
         let playerData = try? NSKeyedArchiver.archivedData(withRootObject: player, requiringSecureCoding: true)
         try? playerData?.write(to: playerDir)
     }
