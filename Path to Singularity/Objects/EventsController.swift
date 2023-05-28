@@ -38,7 +38,6 @@ class EventsController: ObservableObject {
     }
     
     func createSaveTimer() {
-        delegate?.saveTimerFired(timer: saveTimer)
         saveTimer = Timer(timeInterval: 5, target: self, selector: #selector(fireSaveTimer), userInfo: nil, repeats: true)
         RunLoop.current.add(saveTimer, forMode: .common)
     }

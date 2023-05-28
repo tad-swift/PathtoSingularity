@@ -13,7 +13,7 @@ struct ShopView: View {
         case boosts, stars
     }
     
-    @StateObject var dataProvider = ShopDataProvider()
+    @StateObject private var dataProvider = ShopDataProvider()
     
     @State private var section: Section = .boosts
     
@@ -33,21 +33,37 @@ struct ShopView: View {
             }
             switch section {
             case .boosts:
-                List(dataProvider.availableBoosts) { boost in
-                    VStack {
-                        Text(boost.name)
-                        Text("+\(boost.bonusEnergy.abbreviated) ✨ boost")
-                    }
-                }
+                BoostList(boosts: dataProvider.availableBoosts)
             case .stars:
-                List(dataProvider.availableStars) { star in
-                    VStack {
-                        Text(star.name)
-                    }
-                }
-                
+                StarList(stars: dataProvider.availableStars)
             }
         }
-        
+    }
+}
+
+fileprivate struct BoostList: View {
+    
+    var boosts: [BoostItem]
+    
+    var body: some View {
+        List(boosts) { boost in
+            VStack {
+                Text(boost.name)
+                Text("+\(boost.bonusEnergy.abbreviated) ✨ boost")
+            }
+        }
+    }
+}
+
+fileprivate struct StarList: View {
+    
+    var stars: [StarItem]
+    
+    var body: some View {
+        List(stars) { star in
+            VStack {
+                Text(star.name)
+            }
+        }
     }
 }

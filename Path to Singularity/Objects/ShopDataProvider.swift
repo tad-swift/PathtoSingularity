@@ -8,7 +8,9 @@
 import UIKit
 
 class ShopDataProvider: ObservableObject {
-    @Published var availableStars: [StarItem] = []
+    @Published var availableStars: [StarItem] = [
+        
+    ]
     
     @Published var availableBoosts: [BoostItem] = [
         BoostItem(name: "Chlorophyll", price: 10, image: UIImage(named: "chlorophyll")!,
