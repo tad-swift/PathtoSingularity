@@ -17,7 +17,7 @@ class StarDataController {
     }
     
     func loadStarData() {
-        if let star = FileStorage.shared.getStar() {
+        if let star = FileStorage.getStar() {
             myStar = star
         } else {
             myStar = Star(energy: 100_000, fuseRate: 1, maxEnergy: 100_000)
@@ -26,7 +26,7 @@ class StarDataController {
     }
     
     func saveData() {
-        FileStorage.shared.save(myStar)
+        FileStorage.save(myStar)
     }
     
 }

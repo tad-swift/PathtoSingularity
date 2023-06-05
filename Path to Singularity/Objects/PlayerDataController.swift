@@ -16,7 +16,7 @@ class PlayerDataController {
     }
     
     func loadPlayerData() {
-        if let player = FileStorage.shared.getPlayer() {
+        if let player = FileStorage.getPlayer() {
             myPlayer = player
         } else {
             myPlayer = Player()
@@ -24,6 +24,6 @@ class PlayerDataController {
     }
     
     func saveData() {
-        FileStorage.shared.save(myPlayer)
+        FileStorage.save(myPlayer)
     }
 }
