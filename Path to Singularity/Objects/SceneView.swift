@@ -8,9 +8,13 @@
 import SceneKit
 
 final class SceneView: SCNView {
-    override func hitTest(_ point: CGPoint, options: [SCNHitTestOption : Any]? = nil) -> [SCNHitTestResult] {
+    override func hitTest(
+        _ point: CGPoint,
+        options: [SCNHitTestOption : Any]? = nil
+    ) -> [SCNHitTestResult] {
         // Check for the number of touches
-        if let touches = self.gestureRecognizers?.compactMap({ $0.numberOfTouches }), touches.count > 1 {
+        if let touches = self.gestureRecognizers?
+            .compactMap({ $0.numberOfTouches }), touches.count > 1 {
             // If more than one touch, return an empty array
             return []
         }

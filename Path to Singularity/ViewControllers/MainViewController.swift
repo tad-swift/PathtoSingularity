@@ -8,10 +8,25 @@
 import UIKit
 import SceneKit
 import ARKit
+import SwiftUI
+
+struct MainView: UIViewControllerRepresentable {
+    func makeUIViewController(context: Context) -> MainViewController {
+        let viewModel = MainSceneViewModel(
+            playerDataController: PlayerDataController(),
+            starDataController: StarDataController()
+        )
+        return MainViewController(viewModel: viewModel)
+    }
+    
+    func updateUIViewController(_ uiViewController: MainViewController, context: Context) {
+        
+    }
+}
 
 final class MainViewController: UIViewController {
     
-    var sceneView = SCNView()
+    var sceneView = ARSCNView()
     
     let energyLabel: UILabel = {
         let v = UILabel()
@@ -58,18 +73,18 @@ final class MainViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        // Create a session configuration
-//        let configuration = ARWorldTrackingConfiguration()
+//         Create a session configuration
+        let configuration = ARWorldTrackingConfiguration()
         
-        // Run the view's session
-//        arView.session.run(configuration)
+//         Run the view's session
+        sceneView.session.run(configuration)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
         // Pause the view's session
-//        arView.session.pause()
+        sceneView.session.pause()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -92,11 +107,23 @@ final class MainViewController: UIViewController {
     
     func setScene() {
         sceneView.scene = SCNScene(named: "art.scnassets/MainScene.scn")!
-        sceneView.scene!.physicsWorld.gravity = SCNVector3Zero
-        sceneView.scene!.rootNode.childNode(withName: "camera", recursively: true)?.position = SCNVector3(0, 1.4, 4)
+        sceneView.scene.physicsWorld.gravity = SCNVector3Zero
+        sceneView.scene.rootNode.childNode(
+            withName: "camera",
+            recursively: true
+        )?.position = SCNVector3(0, 1.4, 4)
         
-        sceneView.scene!.rootNode.addChildNode(viewModel.myStar.node)
-        viewModel.starDataController.myStar.node.runAction(SCNAction.repeatForever(SCNAction.rotateBy(x: 0, y: CGFloat(viewModel.myStar.rotationSpeed), z: 0, duration: 1)))
+        sceneView.scene.rootNode.addChildNode(viewModel.myStar.node)
+        viewModel.starDataController.myStar.node.runAction(
+            SCNAction.repeatForever(
+                SCNAction.rotateBy(
+                    x: 0,
+                    y: CGFloat(viewModel.myStar.rotationSpeed),
+                    z: 0,
+                    duration: 1
+                )
+            )
+        )
         if viewModel.myStar.zams > 25 && !viewModel.myStar.isAlive {
             DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
                 self.viewModel.myStar.performSuperNova()
@@ -111,13 +138,32 @@ final class MainViewController: UIViewController {
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
         sceneView.addGestureRecognizer(tapGesture)
-        NotificationCenter.default.addObserver(self, selector: #selector(updateLabels), name: NSNotification.Name(rawValue: "updateLabels"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(reloadStar), name: NSNotification.Name(rawValue: "reloadStar"), object: nil)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(updateLabels),
+            name: NSNotification.Name(rawValue: "updateLabels"),
+            object: nil
+        )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(reloadStar),
+            name: NSNotification.Name(rawValue: "reloadStar"),
+            object: nil
+        )
     }
     
     @objc func reloadStar() {
-        sceneView.scene!.rootNode.addChildNode(viewModel.starDataController.myStar.node)
-        viewModel.starDataController.myStar.node.runAction(SCNAction.repeatForever(SCNAction.rotateBy(x: 0, y: CGFloat(viewModel.starDataController.myStar.rotationSpeed), z: 0, duration: 1)))
+        sceneView.scene.rootNode.addChildNode(viewModel.starDataController.myStar.node)
+        viewModel.starDataController.myStar.node.runAction(
+            SCNAction.repeatForever(
+                SCNAction.rotateBy(
+                    x: 0,
+                    y: CGFloat(viewModel.starDataController.myStar.rotationSpeed),
+                    z: 0,
+                    duration: 1
+                )
+            )
+        )
         energyBar.progress = 1
         viewModel.eventsController.createLifeTimer()
     }

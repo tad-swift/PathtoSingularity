@@ -14,7 +14,10 @@ class MainSceneViewModel: ObservableObject {
     let playerDataController: PlayerDataController
     let starDataController: StarDataController
     
-    init(playerDataController: PlayerDataController, starDataController: StarDataController) {
+    init(
+        playerDataController: PlayerDataController,
+        starDataController: StarDataController
+    ) {
         self.playerDataController = playerDataController
         self.starDataController = starDataController
     }

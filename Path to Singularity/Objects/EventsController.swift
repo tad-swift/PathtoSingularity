@@ -28,17 +28,35 @@ class EventsController: ObservableObject {
     }
     
     func createLifeTimer() {
-        lifeTimer = Timer(timeInterval: 0.1, target: self, selector: #selector(fireLifeTimer), userInfo: nil, repeats: true)
+        lifeTimer = Timer(
+            timeInterval: 0.1,
+            target: self,
+            selector: #selector(fireLifeTimer),
+            userInfo: nil,
+            repeats: true
+        )
         RunLoop.current.add(lifeTimer, forMode: .common)
     }
     
     func createAutoTimer() {
-        autoTimer = Timer(timeInterval: 1, target: self, selector: #selector(fireAutoTimer), userInfo: nil, repeats: true)
+        autoTimer = Timer(
+            timeInterval: 1,
+            target: self,
+            selector: #selector(fireAutoTimer),
+            userInfo: nil,
+            repeats: true
+        )
         RunLoop.current.add(autoTimer, forMode: .common)
     }
     
     func createSaveTimer() {
-        saveTimer = Timer(timeInterval: 5, target: self, selector: #selector(fireSaveTimer), userInfo: nil, repeats: true)
+        saveTimer = Timer(
+            timeInterval: 5,
+            target: self,
+            selector: #selector(fireSaveTimer),
+            userInfo: nil,
+            repeats: true
+        )
         RunLoop.current.add(saveTimer, forMode: .common)
     }
     
