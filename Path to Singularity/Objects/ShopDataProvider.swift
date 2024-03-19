@@ -7,12 +7,12 @@
 
 import UIKit
 
-class ShopDataProvider: ObservableObject {
-    @Published var availableStars: [StarItem] = [
+class ShopDataProvider {
+    var availableStars: [StarItem] = [
         
     ]
     
-    @Published var availableBoosts: [BoostItem] = [
+    var availableBoosts: [BoostItem] = [
         BoostItem(name: "Chlorophyll", price: 10, image: UIImage(named: "chlorophyll")!,
                  bonusEnergy: 1),
         BoostItem(name: "Algae", price: 40, image: UIImage(named: "algae")!,

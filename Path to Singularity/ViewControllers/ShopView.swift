@@ -13,7 +13,7 @@ struct ShopView: View {
         case boosts, stars
     }
     
-    @StateObject private var dataProvider = ShopDataProvider()
+    private var dataProvider = ShopDataProvider()
     
     @State private var section: Section = .boosts
     
@@ -21,16 +21,19 @@ struct ShopView: View {
         VStack {
             HStack {
                 Button {
-                    
+                    section = .boosts
                 } label: {
                     Text("Boosts")
                 }
                 Button {
-                    
+                    section = .stars
                 } label: {
                     Text("Stars")
                 }
             }
+            .buttonStyle(.borderedProminent)
+            .padding()
+            
             switch section {
             case .boosts:
                 BoostList(boosts: dataProvider.availableBoosts)
@@ -41,29 +44,34 @@ struct ShopView: View {
     }
 }
 
-fileprivate struct BoostList: View {
+extension ShopView {
     
-    var boosts: [BoostItem]
-    
-    var body: some View {
-        List(boosts) { boost in
-            VStack {
-                Text(boost.name)
-                Text("+\(boost.bonusEnergy.abbreviated) ✨ boost")
+    struct BoostList: View {
+        
+        let boosts: [BoostItem]
+        
+        var body: some View {
+            List(boosts) { boost in
+                VStack {
+                    Text(boost.name)
+                    Text("+\(boost.bonusEnergy.abbreviated) ✨ boost")
+                }
             }
+            .listStyle(.plain)
         }
     }
-}
-
-fileprivate struct StarList: View {
     
-    var stars: [StarItem]
-    
-    var body: some View {
-        List(stars) { star in
-            VStack {
-                Text(star.name)
+    struct StarList: View {
+        
+        let stars: [StarItem]
+        
+        var body: some View {
+            List(stars) { star in
+                VStack {
+                    Text(star.name)
+                }
             }
+            .listStyle(.plain)
         }
     }
 }

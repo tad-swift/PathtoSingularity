@@ -8,7 +8,7 @@
 import UIKit
 
 @dynamicMemberLookup
-class MainSceneViewModel: ObservableObject {
+class MainSceneViewModel {
     
     let eventsController = EventsController()
     let playerDataController: PlayerDataController

@@ -13,7 +13,7 @@ protocol EventsControllerDelegate: AnyObject {
     func saveTimerFired(timer: Timer)
 }
 
-class EventsController: ObservableObject {
+class EventsController {
     
     var lifeTimer: Timer!
     var autoTimer: Timer!

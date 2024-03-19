@@ -7,7 +7,6 @@
 
 import UIKit
 import SceneKit
-import ARKit
 import SwiftUI
 
 struct MainView: UIViewControllerRepresentable {
@@ -24,9 +23,9 @@ struct MainView: UIViewControllerRepresentable {
     }
 }
 
-final class MainViewController: UIViewController {
+final class MainViewController: UIViewController, SCNSceneRendererDelegate {
     
-    var sceneView = ARSCNView()
+    var sceneView = SCNView()
     
     let energyLabel: UILabel = {
         let v = UILabel()
@@ -44,7 +43,7 @@ final class MainViewController: UIViewController {
         .lightContent
     }
     
-    var viewModel: MainSceneViewModel
+    let viewModel: MainSceneViewModel
     
     init(viewModel: MainSceneViewModel) {
         self.viewModel = viewModel
@@ -69,31 +68,8 @@ final class MainViewController: UIViewController {
         super.viewDidLayoutSubviews()
         sceneView.frame = view.bounds
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
         
-//         Create a session configuration
-        let configuration = ARWorldTrackingConfiguration()
-        
-//         Run the view's session
-        sceneView.session.run(configuration)
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        
-        // Pause the view's session
-        sceneView.session.pause()
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-
-    }
-    
     func activateConstraints() {
-        
         view.addSubviews(sceneView, energyBar, energyLabel)
         NSLayoutConstraint.activate([
             energyBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
@@ -106,15 +82,16 @@ final class MainViewController: UIViewController {
     }
     
     func setScene() {
+        sceneView.preferredFramesPerSecond = 120
         sceneView.scene = SCNScene(named: "art.scnassets/MainScene.scn")!
-        sceneView.scene.physicsWorld.gravity = SCNVector3Zero
-        sceneView.scene.rootNode.childNode(
+        sceneView.scene?.physicsWorld.gravity = SCNVector3Zero
+        sceneView.scene?.rootNode.childNode(
             withName: "camera",
             recursively: true
         )?.position = SCNVector3(0, 1.4, 4)
         
-        sceneView.scene.rootNode.addChildNode(viewModel.myStar.node)
-        viewModel.starDataController.myStar.node.runAction(
+        sceneView.scene?.rootNode.addChildNode(viewModel.myStar.node)
+        viewModel.myStar.node.runAction(
             SCNAction.repeatForever(
                 SCNAction.rotateBy(
                     x: 0,
@@ -133,7 +110,7 @@ final class MainViewController: UIViewController {
     
     func createViews() {
         energyLabel.font = .roundedFont(ofSize: 22, weight: .bold)
-        energyBar.progress = Float(viewModel.starDataController.myStar.energy / viewModel.starDataController.myStar.maxEnergy)
+        energyBar.progress = Float(viewModel.myStar.energy / viewModel.myStar.maxEnergy)
         updateLabels()
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
@@ -153,12 +130,12 @@ final class MainViewController: UIViewController {
     }
     
     @objc func reloadStar() {
-        sceneView.scene.rootNode.addChildNode(viewModel.starDataController.myStar.node)
-        viewModel.starDataController.myStar.node.runAction(
+        sceneView.scene?.rootNode.addChildNode(viewModel.myStar.node)
+        viewModel.myStar.node.runAction(
             SCNAction.repeatForever(
                 SCNAction.rotateBy(
                     x: 0,
-                    y: CGFloat(viewModel.starDataController.myStar.rotationSpeed),
+                    y: CGFloat(viewModel.myStar.rotationSpeed),
                     z: 0,
                     duration: 1
                 )
@@ -280,30 +257,4 @@ extension MainViewController: EventsControllerDelegate {
         viewModel.saveData()
     }
     
-}
-
-extension MainViewController: ARSCNViewDelegate {
-    /*
-     // Override to create and configure nodes for anchors added to the view's session.
-     func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
-     let node = SCNNode()
-     
-     return node
-     }
-     */
-    
-    func session(_ session: ARSession, didFailWithError error: Error) {
-        // Present an error message to the user
-        
-    }
-    
-    func sessionWasInterrupted(_ session: ARSession) {
-        // Inform the user that the session has been interrupted, for example, by presenting an overlay
-        
-    }
-    
-    func sessionInterruptionEnded(_ session: ARSession) {
-        // Reset tracking and/or remove existing anchors if consistent tracking is required
-        
-    }
 }

@@ -10,9 +10,10 @@
 		4509B7172A21521400A877A1 /* ShopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4509B7162A21521400A877A1 /* ShopView.swift */; };
 		4509B7192A2152F500A877A1 /* ShopDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4509B7182A2152F500A877A1 /* ShopDataProvider.swift */; };
 		451A903329C7DDD00001CA76 /* FileStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451A903229C7DDD00001CA76 /* FileStorage.swift */; };
-		451A903529C7F57C0001CA76 /* SceneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451A903429C7F57C0001CA76 /* SceneView.swift */; };
 		451EC4E72A868B36004369F1 /* PathToSingularity_App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451EC4E62A868B36004369F1 /* PathToSingularity_App.swift */; };
 		45791511261799B000F9EBBE /* UIKitExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45791510261799B000F9EBBE /* UIKitExtensions.swift */; };
+		45A9CD822BA73F5F0014DFB9 /* Scale.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45A9CD812BA73F5F0014DFB9 /* Scale.swift */; };
+		45A9CD842BA742B10014DFB9 /* StarDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45A9CD832BA742B10014DFB9 /* StarDelegate.swift */; };
 		45D06A9028E4BCCA00BD87B7 /* PlayerDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D06A8F28E4BCCA00BD87B7 /* PlayerDataController.swift */; };
 		45D06A9228E4BD3700BD87B7 /* EventsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D06A9128E4BD3700BD87B7 /* EventsController.swift */; };
 		45D06A9428E4BD5D00BD87B7 /* StarDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D06A9328E4BD5D00BD87B7 /* StarDataController.swift */; };
@@ -30,10 +31,11 @@
 		4509B7162A21521400A877A1 /* ShopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopView.swift; sourceTree = "<group>"; };
 		4509B7182A2152F500A877A1 /* ShopDataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopDataProvider.swift; sourceTree = "<group>"; };
 		451A903229C7DDD00001CA76 /* FileStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileStorage.swift; sourceTree = "<group>"; };
-		451A903429C7F57C0001CA76 /* SceneView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneView.swift; sourceTree = "<group>"; };
 		451EC4E62A868B36004369F1 /* PathToSingularity_App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathToSingularity_App.swift; sourceTree = "<group>"; };
 		45791510261799B000F9EBBE /* UIKitExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIKitExtensions.swift; sourceTree = "<group>"; };
 		459DE8B926FE31120044CE7A /* Path to Singularity.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Path to Singularity.entitlements"; sourceTree = "<group>"; };
+		45A9CD812BA73F5F0014DFB9 /* Scale.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scale.swift; sourceTree = "<group>"; };
+		45A9CD832BA742B10014DFB9 /* StarDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarDelegate.swift; sourceTree = "<group>"; };
 		45D06A8F28E4BCCA00BD87B7 /* PlayerDataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerDataController.swift; sourceTree = "<group>"; };
 		45D06A9128E4BD3700BD87B7 /* EventsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsController.swift; sourceTree = "<group>"; };
 		45D06A9328E4BD5D00BD87B7 /* StarDataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarDataController.swift; sourceTree = "<group>"; };
@@ -72,6 +74,8 @@
 			children = (
 				45D06AE328E5C1C000BD87B7 /* Player.swift */,
 				45F065542612F25200A729EF /* Star.swift */,
+				45A9CD832BA742B10014DFB9 /* StarDelegate.swift */,
+				45A9CD812BA73F5F0014DFB9 /* Scale.swift */,
 				45EDA9F026180D1C00144C8E /* ShopItem.swift */,
 			);
 			path = Models;
@@ -102,7 +106,6 @@
 				45D06A9128E4BD3700BD87B7 /* EventsController.swift */,
 				45D06A9528E4BE2600BD87B7 /* MainSceneViewModel.swift */,
 				451A903229C7DDD00001CA76 /* FileStorage.swift */,
-				451A903429C7F57C0001CA76 /* SceneView.swift */,
 				4509B7182A2152F500A877A1 /* ShopDataProvider.swift */,
 			);
 			path = Objects;
@@ -224,10 +227,11 @@
 				45791511261799B000F9EBBE /* UIKitExtensions.swift in Sources */,
 				451EC4E72A868B36004369F1 /* PathToSingularity_App.swift in Sources */,
 				45EDA9F126180D1C00144C8E /* ShopItem.swift in Sources */,
-				451A903529C7F57C0001CA76 /* SceneView.swift in Sources */,
 				45D06A9628E4BE2600BD87B7 /* MainSceneViewModel.swift in Sources */,
+				45A9CD822BA73F5F0014DFB9 /* Scale.swift in Sources */,
 				45F065442612F1FE00A729EF /* MainViewController.swift in Sources */,
 				4509B7172A21521400A877A1 /* ShopView.swift in Sources */,
+				45A9CD842BA742B10014DFB9 /* StarDelegate.swift in Sources */,
 				45D06A9028E4BCCA00BD87B7 /* PlayerDataController.swift in Sources */,
 				45D06A9228E4BD3700BD87B7 /* EventsController.swift in Sources */,
 				45D06AE728E5C1C000BD87B7 /* Player.swift in Sources */,

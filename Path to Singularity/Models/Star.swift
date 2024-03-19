@@ -9,11 +9,9 @@ import Foundation
 import UIKit
 import SceneKit
 
-
 class Star: NSObject, NSSecureCoding {
-    static var supportsSecureCoding: Bool {
-        true
-    }
+    
+    static var supportsSecureCoding: Bool { true }
     
     var energy: Double
     var fuseRate: Double
@@ -21,23 +19,30 @@ class Star: NSObject, NSSecureCoding {
     var maxEnergy: Double
     var name: String?
     var rotationSpeed: Double
-    var scalex: Float
-    var scaley: Float
-    var scalez: Float
+    var scale: Scale
     var zams: Double
     var color: UIColor
     var node: SCNNode
     
-    internal init(energy: Double, fuseRate: Double, isAlive: Bool = true, maxEnergy: Double, name: String? = nil, rotationSpeed: Double = 1, scalex: Float = 1, scaley: Float = 1, scalez: Float = 1, zams: Double = 0.8, color: UIColor = .red, node: SCNNode = SCNNode()) {
+    init(
+        energy: Double,
+        fuseRate: Double,
+        isAlive: Bool = true,
+        maxEnergy: Double,
+        name: String? = nil,
+        rotationSpeed: Double = 1,
+        scale: Scale = Scale(1, 1, 1),
+        zams: Double = 0.8,
+        color: UIColor = .red,
+        node: SCNNode = SCNNode()
+    ) {
         self.energy = energy
         self.fuseRate = fuseRate
         self.isAlive = isAlive
         self.maxEnergy = maxEnergy
         self.name = name
         self.rotationSpeed = rotationSpeed
-        self.scalex = scalex
-        self.scaley = scaley
-        self.scalez = scalez
+        self.scale = scale
         self.zams = zams
         self.color = color
         self.node = node
@@ -55,27 +60,23 @@ class Star: NSObject, NSSecureCoding {
         self.maxEnergy = coder.decodeDouble(forKey: "maxEnergy")
         self.name = coder.decodeObject(of: NSString.self, forKey: "name") as String?
         self.rotationSpeed = coder.decodeDouble(forKey: "rotationSpeed")
-        self.scalex = coder.decodeFloat(forKey: "scalex")
-        self.scaley = coder.decodeFloat(forKey: "scaley")
-        self.scalez = coder.decodeFloat(forKey: "scalez")
+        self.scale = coder.decodeObject(of: Scale.self, forKey: "scale") ?? Scale(1, 1, 1)
         self.zams = coder.decodeDouble(forKey: "zams")
         self.color = coder.decodeObject(of: UIColor.self, forKey: "color") ?? .red
         super.init()
     }
     
-    func encode(with aCoder: NSCoder) {
-        aCoder.encode(node, forKey: "node")
-        aCoder.encode(energy, forKey: "energy")
-        aCoder.encode(fuseRate, forKey: "fuseRate")
-        aCoder.encode(isAlive, forKey: "isAlive")
-        aCoder.encode(maxEnergy, forKey: "maxEnergy")
-        aCoder.encode(name, forKey: "name")
-        aCoder.encode(rotationSpeed, forKey: "rotationSpeed")
-        aCoder.encode(scalex, forKey: "scalex")
-        aCoder.encode(scaley, forKey: "scaley")
-        aCoder.encode(scalez, forKey: "scalez")
-        aCoder.encode(zams, forKey: "zams")
-        aCoder.encode(color, forKey: "color")
+    func encode(with coder: NSCoder) {
+        coder.encode(node, forKey: "node")
+        coder.encode(energy, forKey: "energy")
+        coder.encode(fuseRate, forKey: "fuseRate")
+        coder.encode(isAlive, forKey: "isAlive")
+        coder.encode(maxEnergy, forKey: "maxEnergy")
+        coder.encode(name, forKey: "name")
+        coder.encode(rotationSpeed, forKey: "rotationSpeed")
+        coder.encode(scale, forKey: "scale")
+        coder.encode(zams, forKey: "zams")
+        coder.encode(color, forKey: "color")
     }
     
 }
@@ -198,7 +199,7 @@ extension Star {
     }
     
     func becomeWhiteDwarf() {
-        self.node.removeAllParticleSystems()
+//        self.node.removeAllParticleSystems()
         SCNTransaction.begin()
         SCNTransaction.animationDuration = 5
         
@@ -304,7 +305,6 @@ extension Star {
         
         return particleSystem
     }
-
     
     func neutronJet(_ position: SCNVector3 = SCNVector3(0, 0, 0)) -> SCNNode {
         let node = SCNNode()
